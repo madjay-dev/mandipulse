@@ -1,14 +1,14 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 from supabase import create_client
 
 # ── CONFIG ──────────────────────────────────────────────────
-SUPABASE_URL     = os.environ.get('SUPABASE_URL')
-SUPABASE_KEY     = os.environ.get('SUPABASE_SERVICE_KEY')
-AGMARKNET_KEY    = os.environ.get('AGMARKNET_KEY')
+SUPABASE_URL  = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY  = os.environ.get('SUPABASE_SERVICE_KEY')
+AGMARKNET_KEY = os.environ.get('AGMARKNET_KEY')
 
-AGMARKNET_BASE   = 'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070'
+AGMARKNET_BASE = 'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070'
 
 COMMODITIES = {
   'Grapes':      ['Grapes','Grapes(Black)','Grapes(Green)','Grapes(White)'],
@@ -26,7 +26,7 @@ COMMODITIES = {
 # ── INIT SUPABASE ────────────────────────────────────────────
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# ── FETCH FROM AGMARKNET API ─────────────────────────────────
+# ── FETCH FROM AGMARKNET ─────────────────────────────────────
 def fetch_commodity(name):
     url = (
         f"{AGMARKNET_BASE}"
@@ -38,8 +38,7 @@ def fetch_commodity(name):
     try:
         res = requests.get(url, timeout=15)
         res.raise_for_status()
-        data = res.json()
-        return data.get('records', [])
+        return res.json().get('records', [])
     except Exception as e:
         print(f"  Error fetching {name}: {e}")
         return []
@@ -57,29 +56,36 @@ def parse_date(date_str):
 
 # ── SAVE TO SUPABASE ─────────────────────────────────────────
 def save_records(commodity, records):
-    rows = []
+    # Deduplicate within batch first
+    seen = {}
     for r in records:
         modal = int(r.get('modal_price') or r.get('Modal_Price') or 0)
         if modal <= 0:
             continue
-        rows.append({
+        row = {
             'commodity':   commodity,
-            'market':      (r.get('market') or r.get('Market') or '').strip(),
-            'state':       (r.get('state')  or r.get('State')  or '').strip(),
-            'district':    (r.get('district') or r.get('District') or '').strip(),
+            'market':      (r.get('market')    or r.get('Market')    or '').strip(),
+            'state':       (r.get('state')     or r.get('State')     or '').strip(),
+            'district':    (r.get('district')  or r.get('District')  or '').strip(),
             'variety':     (r.get('commodity') or r.get('Commodity') or '').strip(),
             'min_price':   int(r.get('min_price') or r.get('Min_Price') or 0),
             'modal_price': modal,
             'max_price':   int(r.get('max_price') or r.get('Max_Price') or 0),
             'price_date':  parse_date(r.get('arrival_date') or r.get('Arrival_Date')),
-        })
+        }
+        # Use same fields as unique constraint
+        key = f"{row['commodity']}|{row['market']}|{row['variety']}|{row['price_date']}"
+        if key not in seen:
+            seen[key] = row
+
+    rows = list(seen.values())
 
     if not rows:
         print(f"  No valid rows for {commodity}")
         return 0
 
-    # Upsert — insert new, skip duplicates
-    result = supabase.table('mandi_prices').upsert(
+    # Upsert — insert new, update existing
+    supabase.table('mandi_prices').upsert(
         rows,
         on_conflict='commodity,market,variety,price_date'
     ).execute()
