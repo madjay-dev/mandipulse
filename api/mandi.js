@@ -2,19 +2,51 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const API_KEY = '579b464db66ec23bdd000001d10eef9e75364fcd6bc278c4f024c720';
-  const BASE = 'https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070';
+  const SUPABASE_URL  = process.env.SUPABASE_URL;
+  const SUPABASE_KEY  = process.env.SUPABASE_ANON_KEY;
 
-  const { commodity } = req.query;
+  const { commodity, state } = req.query;
+
   if (!commodity) {
     return res.status(400).json({ error: 'commodity param required' });
   }
 
   try {
-    const url = `${BASE}?api-key=${API_KEY}&format=json&limit=100&filters[commodity]=${encodeURIComponent(commodity)}`;
-    const response = await fetch(url);
+    // Build Supabase query URL
+    let url = `${SUPABASE_URL}/rest/v1/mandi_prices`
+            + `?commodity=eq.${encodeURIComponent(commodity)}`
+            + `&order=price_date.desc,modal_price.desc`
+            + `&limit=200`;
+
+    // Optional state filter
+    if (state) {
+      url += `&state=eq.${encodeURIComponent(state)}`;
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        'apikey':        SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type':  'application/json',
+      }
+    });
+
     const data = await response.json();
-    return res.status(200).json(data);
+
+    // Format to match existing structure MandiPulse expects
+    const records = data.map(r => ({
+      market:       r.market,
+      state:        r.state,
+      district:     r.district,
+      commodity:    r.variety,
+      min_price:    r.min_price,
+      modal_price:  r.modal_price,
+      max_price:    r.max_price,
+      arrival_date: r.price_date,
+    }));
+
+    return res.status(200).json({ records });
+
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
