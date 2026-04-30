@@ -5,886 +5,714 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MandiPulse — India Produce Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --saffron: #FF6B00;
-    --saffron-light: #FF8C38;
-    --saffron-pale: #FFF3E8;
-    --india-green: #1A7A4A;
-    --india-green-light: #22A060;
-    --soil: #2C1810;
-    --cream: #FAF6F0;
-    --charcoal: #1C1C1C;
-    --muted: #7A7068;
-    --card-bg: #FFFFFF;
-    --border: #EDE8E0;
-    --red-alert: #E63946;
-    --gold: #D4A017;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Mono', monospace;
-    background: var(--cream);
-    color: var(--charcoal);
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  header {
-    background: var(--soil);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 3px solid var(--saffron);
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-mark {
-    width: 36px;
-    height: 36px;
-    background: var(--saffron);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-  }
-
-  .logo-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: #fff;
-    letter-spacing: -0.5px;
-  }
-
-  .logo-text span {
-    color: var(--saffron);
-  }
-
-  .tagline {
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .live-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(26,122,74,0.2);
-    border: 1px solid var(--india-green);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.7rem;
-    color: #4AE085;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .live-dot {
-    width: 6px;
-    height: 6px;
-    background: #4AE085;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .last-updated {
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.4);
-  }
-
-  /* COMMODITY STRIP */
-  .commodity-strip {
-    background: var(--saffron);
-    overflow: hidden;
-    height: 36px;
-    display: flex;
-    align-items: center;
-  }
-
-  .strip-track {
-    display: flex;
-    gap: 3rem;
-    animation: scroll 30s linear infinite;
-    white-space: nowrap;
-  }
-
-  @keyframes scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  .strip-item {
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: var(--soil);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .strip-item .up { color: #1A4A2A; }
-  .strip-item .dn { color: #7A1510; }
-
-  /* MAIN LAYOUT */
-  .main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 1.5rem;
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .panel {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .panel-header {
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .panel-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: var(--charcoal);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .panel-body { padding: 0.75rem; }
-
-  /* COMMODITY SELECTOR */
-  .commodity-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .comm-btn {
-    background: var(--cream);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 0.6rem 0.4rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    font-family: 'DM Mono', monospace;
-  }
-
-  .comm-btn:hover {
-    border-color: var(--saffron);
-    background: var(--saffron-pale);
-  }
-
-  .comm-btn.active {
-    border-color: var(--saffron);
-    background: var(--saffron);
-    color: white;
-  }
-
-  .comm-btn .emoji { font-size: 1.3rem; display: block; margin-bottom: 3px; }
-  .comm-btn .name { font-size: 0.62rem; font-weight: 500; }
-
-  /* STATE FILTER */
-  .state-list {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .state-item {
-    padding: 0.4rem 0.6rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.15s;
-  }
-
-  .state-item:hover { background: var(--cream); }
-  .state-item.active { background: var(--saffron-pale); color: var(--saffron); font-weight: 500; }
-
-  .state-count {
-    font-size: 0.6rem;
-    color: var(--muted);
-    background: var(--cream);
-    padding: 1px 6px;
-    border-radius: 10px;
-  }
-
-  /* MAIN CONTENT */
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  /* STAT CARDS */
-  .stat-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-  }
-
-  .stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.1rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-
-  .stat-card.orange::before { background: var(--saffron); }
-  .stat-card.green::before { background: var(--india-green); }
-  .stat-card.red::before { background: var(--red-alert); }
-  .stat-card.gold::before { background: var(--gold); }
-
-  .stat-label {
-    font-size: 0.62rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: var(--charcoal);
-    line-height: 1;
-  }
-
-  .stat-sub {
-    font-size: 0.65rem;
-    color: var(--muted);
-    margin-top: 0.3rem;
-  }
-
-  .stat-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 0.65rem;
-    padding: 2px 7px;
-    border-radius: 10px;
-    margin-top: 0.3rem;
-  }
-
-  .stat-badge.up { background: #E8F8EF; color: var(--india-green); }
-  .stat-badge.dn { background: #FDECEA; color: var(--red-alert); }
-
-  /* CHART AREA */
-  .chart-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1rem;
-  }
-
-  .chart-container {
-    position: relative;
-    height: 260px;
-  }
-
-  /* MANDI TABLE */
-  .mandi-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.72rem;
-  }
-
-  .mandi-table th {
-    text-align: left;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    background: var(--cream);
-    font-weight: 500;
-  }
-
-  .mandi-table td {
-    padding: 0.65rem 0.8rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--charcoal);
-  }
-
-  .mandi-table tr:last-child td { border-bottom: none; }
-  .mandi-table tr:hover td { background: var(--cream); }
-
-  .price-cell {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.82rem;
-  }
-
-  .trend-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.65rem;
-    font-weight: 500;
-  }
-
-  .trend-pill.up { background: #E8F8EF; color: #1A7A4A; }
-  .trend-pill.dn { background: #FDECEA; color: #E63946; }
-  .trend-pill.flat { background: #F0EDE8; color: var(--muted); }
-
-  .mandi-name { font-weight: 500; color: var(--charcoal); }
-  .state-name { color: var(--muted); font-size: 0.65rem; }
-
-  /* AI INSIGHTS */
-  .ai-panel {
-    background: linear-gradient(135deg, var(--soil) 0%, #3D2416 100%);
-    border: 1px solid rgba(255,107,0,0.3);
-    border-radius: 12px;
-    padding: 1.2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ai-panel::before {
-    content: '';
-    position: absolute;
-    top: -50px; right: -50px;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .ai-label {
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--saffron);
-    margin-bottom: 0.7rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .ai-content {
-    color: rgba(255,255,255,0.85);
-    font-size: 0.75rem;
-    line-height: 1.7;
-    min-height: 80px;
-  }
-
-  .ai-loading {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.72rem;
-  }
-
-  .ai-spinner {
-    width: 14px; height: 14px;
-    border: 2px solid rgba(255,107,0,0.3);
-    border-top-color: var(--saffron);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .insight-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.8rem;
-  }
-
-  .chip {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.6);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .chip:hover, .chip.active {
-    background: rgba(255,107,0,0.2);
-    border-color: var(--saffron);
-    color: var(--saffron-light);
-  }
-
-  /* SEARCH BAR */
-  .search-bar {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .search-input {
-    flex: 1;
-    padding: 0.6rem 1rem;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    background: white;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .search-input:focus { border-color: var(--saffron); }
-
-  .ask-btn {
-    padding: 0.6rem 1.2rem;
-    background: var(--saffron);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-
-  .ask-btn:hover { background: var(--saffron-light); }
-  .ask-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  /* FORECAST */
-  .forecast-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-  }
-
-  .forecast-week {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0.7rem;
-    text-align: center;
-  }
-
-  .fw-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .fw-price {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0.2rem 0;
-  }
-  .fw-range { font-size: 0.58rem; color: var(--muted); }
-
-  /* SECTION TITLE */
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1rem;
-    color: var(--charcoal);
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .section-sub {
-    font-size: 0.65rem;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-weight: 400;
-    margin-top: 2px;
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    .main { grid-template-columns: 1fr; }
-    .stat-row { grid-template-columns: repeat(2, 1fr); }
-    .chart-row { grid-template-columns: 1fr; }
-  }
-
-  .mini-flag {
-    width: 14px; height: 10px;
-    display: inline-block;
-    background: linear-gradient(180deg, #FF9933 33%, #fff 33%, #fff 66%, #138808 66%);
-    border-radius: 1px;
-    vertical-align: middle;
-    margin-right: 4px;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 0.5rem 0;
-  }
-
-  .text-up { color: var(--india-green); }
-  .text-dn { color: var(--red-alert); }
-
-  .empty-state {
-    text-align: center;
-    padding: 2rem;
-    color: var(--muted);
-    font-size: 0.75rem;
-  }
-
-  .source-note {
-    font-size: 0.6rem;
-    color: var(--muted);
-    text-align: right;
-    margin-top: 0.5rem;
-  }
-
-  .shimmer {
-    background: linear-gradient(90deg, #f0ece6 25%, #e8e4de 50%, #f0ece6 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 4px;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  .refresh-btn {
-    padding: 4px 10px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.65rem;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: 'DM Mono', monospace;
-    transition: all 0.2s;
-  }
-  .refresh-btn:hover { border-color: var(--saffron); color: var(--saffron); }
+:root {
+  --saffron: #E8621A;
+  --saffron-light: #F07840;
+  --saffron-pale: #FDF3EC;
+  --green: #1B6B3A;
+  --green-light: #238A4B;
+  --green-pale: #EBF5EF;
+  --soil: #1E1208;
+  --soil-2: #2D1C0E;
+  --cream: #F8F4EE;
+  --cream-2: #F0EBE2;
+  --white: #FFFCF8;
+  --charcoal: #1A1612;
+  --muted: #7A6F65;
+  --border: #E5DDD3;
+  --border-2: #D4CAC0;
+  --red: #C8372D;
+  --gold: #B8860B;
+  --card: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+header {
+  background: var(--soil);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 2px solid var(--saffron);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 34px; height: 34px;
+  background: var(--saffron);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.logo-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.logo-name span { color: var(--saffron); }
+
+.logo-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(27,107,58,0.2);
+  border: 1px solid rgba(27,107,58,0.5);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: #5DD68A;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.live-dot {
+  width: 5px; height: 5px;
+  background: #5DD68A;
+  border-radius: 50%;
+  animation: blink 1.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.header-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── TICKER ─────────────────────────────────────────────── */
+.ticker-wrap {
+  background: var(--saffron);
+  height: 34px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  display: flex;
+  gap: 3rem;
+  animation: ticker 35s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--soil);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.t-up { color: #0D3D1A; font-weight: 600; }
+.t-dn { color: #5A0F0A; font-weight: 600; }
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 78px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-head {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--charcoal);
+}
+
+.card-body { padding: 0.75rem; }
+
+/* ── COMMODITY BUTTONS ──────────────────────────────────── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  padding: 0.5rem 0.75rem 0.25rem;
+}
+
+.comm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.comm-btn {
+  border: 1.5px solid var(--border);
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 0.55rem 0.3rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s ease;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.comm-btn:hover {
+  border-color: var(--saffron);
+  background: var(--saffron-pale);
+  transform: translateY(-1px);
+}
+
+.comm-btn.active {
+  border-color: var(--saffron);
+  background: var(--saffron);
+  color: white;
+  box-shadow: 0 3px 10px rgba(232,98,26,0.3);
+}
+
+.comm-emoji { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+.comm-name { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3px; }
+
+/* ── MAIN ───────────────────────────────────────────────── */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── STAT ROW ───────────────────────────────────────────── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.1rem 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+}
+
+.sc-orange::after { background: var(--saffron); }
+.sc-green::after { background: var(--green); }
+.sc-gold::after { background: var(--gold); }
+.sc-red::after { background: var(--red); }
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+
+.stat-val {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--charcoal);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.stat-sub {
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+  font-family: 'DM Mono', monospace;
+}
+
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 8px;
+  margin-top: 0.35rem;
+  font-family: 'DM Mono', monospace;
+}
+
+.badge-up { background: var(--green-pale); color: var(--green); }
+.badge-dn { background: #FDECEA; color: var(--red); }
+.badge-flat { background: var(--cream-2); color: var(--muted); }
+
+/* ── CHART ROW ──────────────────────────────────────────── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 1.25rem;
+}
+
+.chart-wrap { height: 240px; position: relative; }
+
+/* ── TABLE ──────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+thead th {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  padding: 0.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--cream);
+  text-align: left;
+  font-weight: 500;
+}
+
+tbody td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--charcoal);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--cream); }
+
+.td-mandi { font-weight: 600; font-size: 0.75rem; }
+.td-state { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.62rem; }
+.td-price { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; }
+.td-modal { color: var(--charcoal); }
+.td-min { color: var(--muted); font-size: 0.7rem; font-family: 'DM Mono', monospace; }
+.td-max { color: var(--gold); font-size: 0.7rem; font-family: 'DM Mono', monospace; }
+
+.trend-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+}
+
+.tt-up { background: var(--green-pale); color: var(--green); }
+.tt-dn { background: #FDECEA; color: var(--red); }
+.tt-flat { background: var(--cream-2); color: var(--muted); }
+
+/* ── FORECAST ───────────────────────────────────────────── */
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.fc-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 0.75rem;
+  text-align: center;
+  background: var(--cream);
+}
+
+.fc-week {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.fc-price {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.fc-range {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--muted);
+}
+
+.fc-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+/* ── SOURCE NOTE ─────────────────────────────────────────── */
+.source-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--muted);
+  padding: 0.5rem 0.9rem;
+  text-align: right;
+  border-top: 1px solid var(--border);
+}
+
+/* ── LOADING / ERROR ─────────────────────────────────────── */
+.loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--saffron);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+}
+
+.error-msg {
+  background: #FFF0EF;
+  border: 1px solid #F5C6C3;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.72rem;
+  color: var(--red);
+  font-family: 'DM Mono', monospace;
+  margin: 0.75rem;
+}
+
+/* ── REFRESH BTN ─────────────────────────────────────────── */
+.refresh-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.refresh-btn:hover { border-color: var(--saffron); color: var(--saffron); }
+
+/* ── DIST LEGEND ─────────────────────────────────────────── */
+.dist-legend {
+  font-size: 0.65rem;
+  line-height: 1.8;
+  padding-top: 0.5rem;
+}
+
+.dl-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dl-dot {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dl-name { flex: 1; color: var(--muted); }
+.dl-price { font-weight: 600; color: var(--charcoal); font-family: 'DM Mono', monospace; }
+
+/* ── DATA STATUS BAR ─────────────────────────────────────── */
+.data-status {
+  background: var(--soil-2);
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.ds-item { display: flex; align-items: center; gap: 5px; }
+.ds-dot { width: 5px; height: 5px; border-radius: 50%; }
+.ds-green { background: #5DD68A; }
+.ds-orange { background: var(--saffron); }
+
+@media (max-width: 960px) {
+  .layout { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .forecast-grid { grid-template-columns: repeat(2, 1fr); }
+  .sidebar { position: static; }
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-mark">🌾</div>
+    <div class="logo-icon">🌾</div>
     <div>
-      <div class="logo-text">Mandi<span>Pulse</span></div>
-      <div class="tagline">India Produce Intelligence</div>
+      <div class="logo-name">Mandi<span>Pulse</span></div>
+      <div class="logo-tag">India Produce Intelligence</div>
     </div>
   </div>
   <div class="header-right">
-    <div class="live-badge"><div class="live-dot"></div> Live</div>
-    <div class="last-updated" id="lastUpdated">Fetching data...</div>
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <div class="header-date" id="headerDate">—</div>
   </div>
 </header>
 
+<!-- DATA STATUS -->
+<div class="data-status">
+  <div class="ds-item"><div class="ds-dot ds-green"></div>AGMARKNET API Connected</div>
+  <div class="ds-item"><div class="ds-dot ds-green"></div>data.gov.in</div>
+  <div class="ds-item" id="recordsStatus"><div class="ds-dot ds-orange"></div>Fetching records...</div>
+</div>
+
 <!-- TICKER -->
-<div class="commodity-strip">
-  <div class="strip-track" id="stripTrack">
-    <div class="strip-item">🥭 Mango · Bengaluru · <span class="up">₹4,200/q</span> <span class="up">↑2.1%</span></div>
-    <div class="strip-item">🍅 Tomato · Nashik · <span class="dn">₹820/q</span> <span class="dn">↓5.3%</span></div>
-    <div class="strip-item">🧅 Onion · Lasalgaon · <span class="up">₹1,540/q</span> <span class="up">↑1.8%</span></div>
-    <div class="strip-item">🍇 Grapes · Sangli · <span class="up">₹3,100/q</span> <span class="up">↑0.9%</span></div>
-    <div class="strip-item">🍌 Banana · Jalgaon · <span class="dn">₹1,200/q</span> <span class="dn">↓1.2%</span></div>
-    <div class="strip-item">🍋 Lemon · Nagpur · <span class="up">₹2,800/q</span> <span class="up">↑3.4%</span></div>
-    <div class="strip-item">🥥 Coconut · Ernakulam · <span class="up">₹1,800/q</span> <span class="up">↑0.5%</span></div>
-    <div class="strip-item">🍐 Guava · Allahabad · <span class="dn">₹1,100/q</span> <span class="dn">↓2.1%</span></div>
-    <!-- Duplicate for seamless loop -->
-    <div class="strip-item">🥭 Mango · Bengaluru · <span class="up">₹4,200/q</span> <span class="up">↑2.1%</span></div>
-    <div class="strip-item">🍅 Tomato · Nashik · <span class="dn">₹820/q</span> <span class="dn">↓5.3%</span></div>
-    <div class="strip-item">🧅 Onion · Lasalgaon · <span class="up">₹1,540/q</span> <span class="up">↑1.8%</span></div>
-    <div class="strip-item">🍇 Grapes · Sangli · <span class="up">₹3,100/q</span> <span class="up">↑0.9%</span></div>
-    <div class="strip-item">🍌 Banana · Jalgaon · <span class="dn">₹1,200/q</span> <span class="dn">↓1.2%</span></div>
-    <div class="strip-item">🍋 Lemon · Nagpur · <span class="up">₹2,800/q</span> <span class="up">↑3.4%</span></div>
-    <div class="strip-item">🥥 Coconut · Ernakulam · <span class="up">₹1,800/q</span> <span class="up">↑0.5%</span></div>
-    <div class="strip-item">🍐 Guava · Allahabad · <span class="dn">₹1,100/q</span> <span class="dn">↓2.1%</span></div>
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item">⏳ Loading live prices...</div>
   </div>
 </div>
 
-<div class="main">
+<!-- LAYOUT -->
+<div class="layout">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-
-    <!-- COMMODITY SELECTOR -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">Commodity</div>
+    <div class="card">
+      <div class="section-label">🍎 Fruits</div>
+      <div class="comm-grid">
+        <button class="comm-btn active" data-c="Grapes" onclick="selectComm(this)">
+          <span class="comm-emoji">🍇</span><span class="comm-name">Grapes</span>
+        </button>
+        <button class="comm-btn" data-c="Apple" onclick="selectComm(this)">
+          <span class="comm-emoji">🍎</span><span class="comm-name">Apple</span>
+        </button>
+        <button class="comm-btn" data-c="Mango" onclick="selectComm(this)">
+          <span class="comm-emoji">🥭</span><span class="comm-name">Mango</span>
+        </button>
+        <button class="comm-btn" data-c="Pomegranate" onclick="selectComm(this)">
+          <span class="comm-emoji">🫐</span><span class="comm-name">Pomegr.</span>
+        </button>
+        <button class="comm-btn" data-c="Orange" onclick="selectComm(this)">
+          <span class="comm-emoji">🍊</span><span class="comm-name">Orange</span>
+        </button>
       </div>
-      <div class="panel-body">
-        <div class="commodity-grid" id="commodityGrid">
-          <button class="comm-btn active" data-commodity="Mango" onclick="selectCommodity(this)">
-            <span class="emoji">🥭</span><span class="name">Mango</span>
-          </button>
-          <button class="comm-btn" data-commodity="Tomato" onclick="selectCommodity(this)">
-            <span class="emoji">🍅</span><span class="name">Tomato</span>
-          </button>
-          <button class="comm-btn" data-commodity="Onion" onclick="selectCommodity(this)">
-            <span class="emoji">🧅</span><span class="name">Onion</span>
-          </button>
-          <button class="comm-btn" data-commodity="Potato" onclick="selectCommodity(this)">
-            <span class="emoji">🥔</span><span class="name">Potato</span>
-          </button>
-          <button class="comm-btn" data-commodity="Banana" onclick="selectCommodity(this)">
-            <span class="emoji">🍌</span><span class="name">Banana</span>
-          </button>
-          <button class="comm-btn" data-commodity="Grapes" onclick="selectCommodity(this)">
-            <span class="emoji">🍇</span><span class="name">Grapes</span>
-          </button>
-          <button class="comm-btn" data-commodity="Pomegranate" onclick="selectCommodity(this)">
-            <span class="emoji">🍎</span><span class="name">Pomegr.</span>
-          </button>
-          <button class="comm-btn" data-commodity="Lemon" onclick="selectCommodity(this)">
-            <span class="emoji">🍋</span><span class="name">Lemon</span>
-          </button>
-          <button class="comm-btn" data-commodity="Coconut" onclick="selectCommodity(this)">
-            <span class="emoji">🥥</span><span class="name">Coconut</span>
-          </button>
-          <button class="comm-btn" data-commodity="Guava" onclick="selectCommodity(this)">
-            <span class="emoji">🍐</span><span class="name">Guava</span>
-          </button>
-        </div>
+
+      <div class="section-label">🥦 Vegetables</div>
+      <div class="comm-grid">
+        <button class="comm-btn" data-c="Coconut" onclick="selectComm(this)">
+          <span class="comm-emoji">🥥</span><span class="comm-name">Coconut</span>
+        </button>
+        <button class="comm-btn" data-c="Garlic" onclick="selectComm(this)">
+          <span class="comm-emoji">🧄</span><span class="comm-name">Garlic</span>
+        </button>
+        <button class="comm-btn" data-c="Ginger" onclick="selectComm(this)">
+          <span class="comm-emoji">🫚</span><span class="comm-name">Ginger</span>
+        </button>
+        <button class="comm-btn" data-c="Onion" onclick="selectComm(this)">
+          <span class="comm-emoji">🧅</span><span class="comm-name">Onion</span>
+        </button>
+        <button class="comm-btn" data-c="Potato" onclick="selectComm(this)">
+          <span class="comm-emoji">🥔</span><span class="comm-name">Potato</span>
+        </button>
+      </div>
+      <div style="padding:0 0.75rem 0.75rem;">
+        <button class="refresh-btn" style="width:100%;padding:6px;" onclick="fetchAll()">↻ Refresh All Data</button>
       </div>
     </div>
 
-    <!-- STATE FILTER -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">State Filter</div>
-        <button class="refresh-btn" onclick="clearStateFilter()">All</button>
-      </div>
-      <div class="panel-body">
-        <div class="state-list" id="stateList">
-          <div class="state-item active" data-state="All" onclick="selectState(this)">
-            <span><span class="mini-flag"></span>All India</span>
-            <span class="state-count" id="totalCount">—</span>
-          </div>
-          <div class="state-item" data-state="Maharashtra" onclick="selectState(this)">
-            <span>Maharashtra</span>
-            <span class="state-count" id="mhCount">—</span>
-          </div>
-          <div class="state-item" data-state="Karnataka" onclick="selectState(this)">
-            <span>Karnataka</span>
-            <span class="state-count" id="kaCount">—</span>
-          </div>
-          <div class="state-item" data-state="Andhra Pradesh" onclick="selectState(this)">
-            <span>Andhra Pradesh</span>
-            <span class="state-count" id="apCount">—</span>
-          </div>
-          <div class="state-item" data-state="Uttar Pradesh" onclick="selectState(this)">
-            <span>Uttar Pradesh</span>
-            <span class="state-count" id="upCount">—</span>
-          </div>
-          <div class="state-item" data-state="Rajasthan" onclick="selectState(this)">
-            <span>Rajasthan</span>
-            <span class="state-count" id="rjCount">—</span>
-          </div>
-          <div class="state-item" data-state="Tamil Nadu" onclick="selectState(this)">
-            <span>Tamil Nadu</span>
-            <span class="state-count" id="tnCount">—</span>
-          </div>
-        </div>
+    <!-- SUMMARY CARD -->
+    <div class="card">
+      <div class="card-head"><div class="card-title">Market Summary</div></div>
+      <div class="card-body" id="summaryBody">
+        <div class="loading-row"><div class="spinner"></div>Loading...</div>
       </div>
     </div>
-
-    <!-- AI QUERY BOX -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">✦ Ask MandiAI</div>
-      </div>
-      <div class="panel-body">
-        <div class="search-bar">
-          <input type="text" class="search-input" id="aiQuery"
-            placeholder="e.g. best time to sell mango?"
-            onkeydown="if(event.key==='Enter') askMandiAI()">
-          <button class="ask-btn" id="askBtn" onclick="askMandiAI()">Ask</button>
-        </div>
-        <div style="margin-top:0.6rem; font-size:0.62rem; color:var(--muted)">
-          Try: "Why are tomato prices falling?" · "When is mango season peak?"
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- MAIN CONTENT -->
-  <div class="content">
+  <div class="main">
 
-    <!-- STAT CARDS -->
+    <!-- STATS -->
     <div class="stat-row">
-      <div class="stat-card orange">
+      <div class="stat-card sc-orange">
         <div class="stat-label">Modal Price</div>
-        <div class="stat-value" id="modalPrice">—</div>
-        <div class="stat-sub">₹ per quintal</div>
-        <div class="stat-badge up" id="modalChange">Loading...</div>
+        <div class="stat-val" id="sModal">—</div>
+        <div class="stat-sub">₹ per quintal · avg</div>
+        <div class="stat-badge badge-flat" id="sTrend">—</div>
       </div>
-      <div class="stat-card green">
+      <div class="stat-card sc-green">
         <div class="stat-label">Mandis Reporting</div>
-        <div class="stat-value" id="mandiCount">—</div>
-        <div class="stat-sub">across India today</div>
+        <div class="stat-val" id="sCount">—</div>
+        <div class="stat-sub" id="sCountSub">across India · today</div>
       </div>
-      <div class="stat-card gold">
+      <div class="stat-card sc-gold">
         <div class="stat-label">Highest Price</div>
-        <div class="stat-value" id="maxPrice">—</div>
-        <div class="stat-sub" id="maxMandi">—</div>
+        <div class="stat-val" id="sMax">—</div>
+        <div class="stat-sub" id="sMaxMandi">—</div>
       </div>
-      <div class="stat-card red">
+      <div class="stat-card sc-red">
         <div class="stat-label">Lowest Price</div>
-        <div class="stat-value" id="minPrice">—</div>
-        <div class="stat-sub" id="minMandi">—</div>
+        <div class="stat-val" id="sMin">—</div>
+        <div class="stat-sub" id="sMinMandi">—</div>
       </div>
     </div>
 
-    <!-- PRICE CHART + DISTRIBUTION -->
+    <!-- CHARTS -->
     <div class="chart-row">
-      <div class="panel">
-        <div class="panel-header">
+      <div class="card">
+        <div class="card-head">
           <div>
-            <div class="panel-title" id="chartTitle">Mango — Price Trend (7 Days)</div>
-            <div class="section-sub">Modal price across major mandis · ₹/quintal</div>
+            <div class="card-title" id="chartTitle">— Price Distribution</div>
+            <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;">Modal price across mandis · ₹/quintal</div>
           </div>
-          <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+          <button class="refresh-btn" onclick="renderCharts()">↻</button>
         </div>
-        <div class="panel-body">
-          <div class="chart-container">
-            <canvas id="priceChart"></canvas>
-          </div>
-          <div class="source-note">Source: AGMARKNET / data.gov.in · Updated daily</div>
+        <div class="card-body">
+          <div class="chart-wrap"><canvas id="barChart"></canvas></div>
         </div>
+        <div class="source-note">Source: AGMARKNET · data.gov.in · Updated daily</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-header">
-          <div class="panel-title">Price Distribution</div>
-        </div>
-        <div class="panel-body">
-          <div class="chart-container" style="height:200px;">
-            <canvas id="distChart"></canvas>
-          </div>
-          <div class="divider"></div>
-          <div id="distLegend" style="font-size:0.65rem; color:var(--muted); line-height:1.6;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI INSIGHT PANEL -->
-    <div class="ai-panel">
-      <div class="ai-label">
-        <div class="ai-spinner" id="aiSpinner" style="display:none"></div>
-        ✦ MandiAI Intelligence
-      </div>
-      <div class="ai-content" id="aiContent">
-        <div class="ai-loading"><div class="ai-spinner"></div> Generating market intelligence...</div>
-      </div>
-      <div class="insight-chips">
-        <div class="chip active" onclick="getInsight('price_drivers')">Price Drivers</div>
-        <div class="chip" onclick="getInsight('best_mandi')">Best Mandi to Sell</div>
-        <div class="chip" onclick="getInsight('forecast')">4-Week Forecast</div>
-        <div class="chip" onclick="getInsight('export')">Export Outlook</div>
-        <div class="chip" onclick="getInsight('seasonal')">Seasonal Pattern</div>
-      </div>
-    </div>
-
-    <!-- 4-WEEK FORECAST -->
-    <div class="panel">
-      <div class="panel-header">
-        <div>
-          <div class="panel-title" id="forecastTitle">Mango — 4-Week Price Forecast</div>
-          <div class="section-sub">AI-generated outlook · indicative only</div>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="forecast-row" id="forecastRow">
-          <div class="forecast-week shimmer" style="height:80px;"></div>
-          <div class="forecast-week shimmer" style="height:80px;"></div>
-          <div class="forecast-week shimmer" style="height:80px;"></div>
-          <div class="forecast-week shimmer" style="height:80px;"></div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">By State</div></div>
+        <div class="card-body">
+          <div class="chart-wrap" style="height:180px;"><canvas id="donutChart"></canvas></div>
+          <div class="dist-legend" id="distLegend"></div>
         </div>
       </div>
     </div>
 
     <!-- MANDI TABLE -->
-    <div class="panel">
-      <div class="panel-header">
+    <div class="card">
+      <div class="card-head">
         <div>
-          <div class="panel-title" id="tableTitle">Top Mandis — Mango</div>
-          <div class="section-sub" id="tableSubtitle">Today's prices · min / modal / max</div>
+          <div class="card-title" id="tableTitle">Mandi Prices</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;" id="tableSub">Min · Modal · Max · ₹/quintal</div>
         </div>
       </div>
-      <div class="panel-body" style="padding:0">
-        <table class="mandi-table">
-          <thead>
-            <tr>
-              <th>Mandi</th>
-              <th>State</th>
-              <th>Min (₹/q)</th>
-              <th>Modal (₹/q)</th>
-              <th>Max (₹/q)</th>
-              <th>Trend</th>
-            </tr>
-          </thead>
-          <tbody id="mandiTableBody">
-            <tr><td colspan="6" class="empty-state">Loading mandi data...</td></tr>
-          </tbody>
-        </table>
-        <div class="source-note" style="padding: 0.5rem 0.8rem;">
-          Data sourced from AGMARKNET via data.gov.in (open govt. data) · Prices in ₹/quintal
+      <div id="tableWrap">
+        <div class="loading-row"><div class="spinner"></div>Fetching live mandi data from AGMARKNET...</div>
+      </div>
+    </div>
+
+    <!-- FORECAST -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title" id="fcTitle">Price Outlook — Next 4 Weeks</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;">Indicative forecast · based on seasonal patterns</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="forecast-grid" id="fcGrid">
+          <div class="fc-card" style="opacity:0.4">—</div>
+          <div class="fc-card" style="opacity:0.4">—</div>
+          <div class="fc-card" style="opacity:0.4">—</div>
+          <div class="fc-card" style="opacity:0.4">—</div>
         </div>
       </div>
     </div>
@@ -893,388 +721,214 @@
 </div>
 
 <script>
-// ─── STATE ─────────────────────────────────────────────────────────────
-let currentCommodity = 'Mango';
-let currentState = 'All';
-let priceChart = null;
-let distChart = null;
-let allMandiData = [];
+// ── CONFIG ─────────────────────────────────────────────────────
+// Now calling our own Vercel API (no CORS issues, key stays safe)
+const API_BASE = '/api/mandi';
 
-// ─── COMMODITY DATA (Realistic AGMARKNET-style data) ──────────────────
-const commodityData = {
-  Mango: {
-    emoji: '🥭',
-    unit: 'quintal',
-    basePrice: 4200,
-    mandis: [
-      { name: 'Bengaluru', state: 'Karnataka', min: 3800, modal: 4200, max: 4800, trend: 'up', change: 2.1 },
-      { name: 'Krishnagiri', state: 'Tamil Nadu', min: 3500, modal: 3900, max: 4400, trend: 'up', change: 1.8 },
-      { name: 'Ratnagiri', state: 'Maharashtra', min: 5500, modal: 6200, max: 7000, trend: 'up', change: 3.2 },
-      { name: 'Hyderabad', state: 'Telangana', min: 3200, modal: 3800, max: 4500, trend: 'flat', change: 0.2 },
-      { name: 'Lucknow', state: 'Uttar Pradesh', min: 2800, modal: 3400, max: 4000, trend: 'up', change: 1.5 },
-      { name: 'Jaipur', state: 'Rajasthan', min: 3000, modal: 3600, max: 4200, trend: 'dn', change: -1.2 },
-      { name: 'Vizag', state: 'Andhra Pradesh', min: 3100, modal: 3700, max: 4300, trend: 'up', change: 0.8 },
-      { name: 'Kochi', state: 'Kerala', min: 4500, modal: 5100, max: 5800, trend: 'dn', change: -0.5 },
-      { name: 'Nashik', state: 'Maharashtra', min: 3800, modal: 4400, max: 5000, trend: 'up', change: 1.1 },
-      { name: 'Ahmedabad', state: 'Gujarat', min: 3200, modal: 3900, max: 4600, trend: 'flat', change: 0.1 },
-    ],
-    trend7d: [3800, 3950, 4100, 3980, 4050, 4150, 4200],
-    insight: {
-      price_drivers: "Mango prices are currently supported by strong demand ahead of peak summer season (May–June). Alphonso variety from Konkan (Ratnagiri, Devgad) is commanding a premium of 40–50% over standard varieties. Delayed pre-monsoon showers in Andhra and Karnataka have reduced arrivals by ~15% vs last year, keeping prices firm. Cold storage utilization is at 78%, creating a buffer but limiting price upside.",
-      best_mandi: "For maximum realization, Ratnagiri and Kochi mandis currently offer the highest modal prices (₹6,200 and ₹5,100/q respectively), but logistical costs are higher. For cost-efficiency, Bengaluru and Krishnagiri offer good volume at ₹4,200–₹3,900/q with high buyer concentration and proximity to processing units.",
-      forecast: "Prices expected to peak in mid-May (₹4,500–₹5,000/q nationally) as summer demand hits its highest point. A correction of 20–30% is likely post-June 15 as Alphonso season ends and north Indian varieties (Dasheri, Langda) flood markets. Export-grade demand from Gulf markets remains strong through July.",
-      export: "India exported ~1.87 lakh MT of fresh mangoes in FY24. UAE, UK, and Bangladesh are top 3 destinations. Current FOB rates from Mumbai: Alphonso at $3.2–3.8/kg, Kesar at $2.1–2.5/kg. APEDA has set a target of 2.2 lakh MT for FY25. Pest-free zone certification from Andhra Pradesh opens new EU market corridors.",
-      seasonal: "Peak season: April–June nationally. Alphonso peaks in April–May, Kesar in June–July, Dasheri/Langda in July–August. Price pattern: rises sharply through March (pre-season), peaks in May, corrects 30–40% by July. Best selling window is typically 3rd week of April to 1st week of June for Alphonso growers."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 4350, low: 4100, high: 4600 },
-      { label: 'Wk 2 (May 12)', price: 4500, low: 4200, high: 4900 },
-      { label: 'Wk 3 (May 19)', price: 4650, low: 4300, high: 5100 },
-      { label: 'Wk 4 (May 26)', price: 4400, low: 4000, high: 4800 },
-    ]
-  },
-  Tomato: {
-    emoji: '🍅',
-    unit: 'quintal',
-    basePrice: 820,
-    mandis: [
-      { name: 'Nashik', state: 'Maharashtra', min: 600, modal: 820, max: 1100, trend: 'dn', change: -5.3 },
-      { name: 'Kolar', state: 'Karnataka', min: 500, modal: 750, max: 980, trend: 'dn', change: -4.1 },
-      { name: 'Madanapalle', state: 'Andhra Pradesh', min: 700, modal: 900, max: 1200, trend: 'flat', change: 0.3 },
-      { name: 'Pune', state: 'Maharashtra', min: 850, modal: 1050, max: 1400, trend: 'up', change: 2.2 },
-      { name: 'Delhi (Azadpur)', state: 'Delhi', min: 900, modal: 1200, max: 1600, trend: 'dn', change: -3.1 },
-      { name: 'Chennai (Koyambedu)', state: 'Tamil Nadu', min: 800, modal: 1000, max: 1300, trend: 'flat', change: 0.1 },
-      { name: 'Hyderabad', state: 'Telangana', min: 750, modal: 950, max: 1250, trend: 'up', change: 1.4 },
-    ],
-    trend7d: [1100, 1050, 980, 920, 870, 840, 820],
-    insight: {
-      price_drivers: "Tomato prices are under pressure due to high arrivals from Nashik and Kolar. Summer crop output is 18% above last year. Export demand to Bangladesh has slowed, adding to domestic supply pressure. Expected to remain weak until June when summer heat reduces production.",
-      best_mandi: "Delhi (Azadpur) and Pune offer best prices at ₹1,200 and ₹1,050/q. However, transport costs from South need to be factored. Locally in Karnataka, Kolar prices are depressed — consider storage or processing (paste, puree) if modal price falls below ₹600/q.",
-      forecast: "Prices likely to stay range-bound at ₹800–1,000/q for next 3 weeks. A recovery to ₹1,400–1,800/q is expected by July–August as summer crop exhausts and monsoon interrupts supply chains.",
-      export: "Tomato export volume is modest — India primarily processes surplus into paste/ketchup for export. Key export markets: Sri Lanka, Bangladesh, Nepal for fresh. Processing units in Nashik and Kolar are absorbing surplus at ₹400–600/q for industrial use.",
-      seasonal: "India has 3 tomato cycles: Kharif (Oct–Dec), Rabi (Jan–Mar), Summer (Apr–Jun). Current summer crop from AP and Karnataka is the largest, often causing May–June price depression. Best prices historically occur in July–September when supply tightens."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 850, low: 700, high: 1000 },
-      { label: 'Wk 2 (May 12)', price: 880, low: 720, high: 1050 },
-      { label: 'Wk 3 (May 19)', price: 950, low: 780, high: 1150 },
-      { label: 'Wk 4 (May 26)', price: 1050, low: 850, high: 1300 },
-    ]
-  },
-  Onion: {
-    emoji: '🧅',
-    unit: 'quintal',
-    basePrice: 1540,
-    mandis: [
-      { name: 'Lasalgaon', state: 'Maharashtra', min: 1200, modal: 1540, max: 1900, trend: 'up', change: 1.8 },
-      { name: 'Pimpalgaon', state: 'Maharashtra', min: 1100, modal: 1450, max: 1800, trend: 'up', change: 1.5 },
-      { name: 'Solapur', state: 'Maharashtra', min: 1150, modal: 1480, max: 1850, trend: 'flat', change: 0.2 },
-      { name: 'Bellary', state: 'Karnataka', min: 900, modal: 1200, max: 1550, trend: 'dn', change: -2.1 },
-      { name: 'Hubli', state: 'Karnataka', min: 950, modal: 1250, max: 1600, trend: 'flat', change: 0.4 },
-      { name: 'Delhi (Azadpur)', state: 'Delhi', min: 1500, modal: 1900, max: 2400, trend: 'up', change: 3.2 },
-    ],
-    trend7d: [1380, 1400, 1450, 1480, 1510, 1520, 1540],
-    insight: {
-      price_drivers: "Onion prices are firming up as Kharif 2024 stocks deplete. Rabi harvest is coming in gradually from Nashik district. Export ban from last year has been lifted, allowing demand from Bangladesh, Malaysia, Sri Lanka to return. Government buffer stock operations are keeping extreme price spikes in check.",
-      best_mandi: "Lasalgaon (Nashik) remains India's price benchmark for onion — it accounts for ~35% of India's onion trade. Delhi Azadpur offers highest price but logistics costs from Nashik need to be factored. For Karnataka growers, Bellary and Hubli are most accessible.",
-      forecast: "Prices expected to rise to ₹2,000–2,500/q by June as supply tightens ahead of Kharif planting. If monsoon is delayed, prices could spike further to ₹3,000+/q as in 2019 and 2023 patterns.",
-      export: "Onion is India's largest vegetable export — ~28 lakh MT/year. Bangladesh, Malaysia, Sri Lanka, UAE are major buyers. FOB Mumbai currently at $380–420/MT. NHRDF is facilitating farmer-to-exporter linkages to reduce middlemen commission (currently 8–12% of trade value).",
-      seasonal: "Two main crops: Kharif (Nov–Dec harvest) and Rabi (Mar–May harvest). Rabi accounts for 65% of production. May–June is typically transition period when old Kharif stocks end and Rabi begins arriving — this gap creates price peaks. Storage (cold + ambient) capacity is critical in this window."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 1600, low: 1480, high: 1750 },
-      { label: 'Wk 2 (May 12)', price: 1720, low: 1580, high: 1900 },
-      { label: 'Wk 3 (May 19)', price: 1850, low: 1680, high: 2050 },
-      { label: 'Wk 4 (May 26)', price: 2000, low: 1800, high: 2300 },
-    ]
-  },
-  Potato: {
-    emoji: '🥔',
-    unit: 'quintal',
-    basePrice: 1050,
-    mandis: [
-      { name: 'Agra', state: 'Uttar Pradesh', min: 850, modal: 1050, max: 1300, trend: 'flat', change: 0.3 },
-      { name: 'Kanpur', state: 'Uttar Pradesh', min: 900, modal: 1100, max: 1350, trend: 'up', change: 1.2 },
-      { name: 'Jalandhar', state: 'Punjab', min: 800, modal: 980, max: 1200, trend: 'dn', change: -1.5 },
-      { name: 'Delhi (Azadpur)', state: 'Delhi', min: 1100, modal: 1350, max: 1700, trend: 'up', change: 2.0 },
-      { name: 'Kolkata', state: 'West Bengal', min: 950, modal: 1150, max: 1400, trend: 'flat', change: 0.1 },
-    ],
-    trend7d: [980, 990, 1020, 1000, 1030, 1040, 1050],
-    insight: {
-      price_drivers: "Potato prices are stable as UP Rabi crop (Feb–March harvest) is now in cold storage. Cold storage fill rate is ~82% in Agra/Mathura belt. Processing demand from chips and french fry manufacturers is steady. Export demand is limited — India primarily focuses on domestic market.",
-      best_mandi: "Delhi Azadpur offers best prices for potato — ₹1,350/q modal. UP mandis (Agra, Kanpur) are the origin markets with lower prices. If you have cold storage access in UP, holding till September–October typically yields 40–60% higher prices.",
-      forecast: "Prices expected to be range-bound through June (₹1,000–1,200/q). Post-monsoon (Oct–Nov) sees typical spike to ₹1,800–2,500/q as cold storage stocks deplete and new Rabi crop is still 2 months away.",
-      export: "India exports ~1.5–2 lakh MT of potato — primarily to Bangladesh, Nepal, and Sri Lanka. Value-added exports (chips, flakes) are growing. Current export price: $180–220/MT FOB.",
-      seasonal: "Main harvest: January–March (Rabi crop). Cold storage absorption peaks in Feb–March. Release from cold storage: June–October. Best time to sell stored potato: September–October when prices are typically 50–70% above harvest price."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 1060, low: 950, high: 1180 },
-      { label: 'Wk 2 (May 12)', price: 1080, low: 970, high: 1200 },
-      { label: 'Wk 3 (May 19)', price: 1100, low: 980, high: 1230 },
-      { label: 'Wk 4 (May 26)', price: 1120, low: 1000, high: 1260 },
-    ]
-  },
-  Banana: {
-    emoji: '🍌',
-    unit: 'quintal',
-    basePrice: 1200,
-    mandis: [
-      { name: 'Jalgaon', state: 'Maharashtra', min: 900, modal: 1200, max: 1600, trend: 'dn', change: -1.2 },
-      { name: 'Thanjavur', state: 'Tamil Nadu', min: 800, modal: 1050, max: 1400, trend: 'flat', change: 0.2 },
-      { name: 'Anantapur', state: 'Andhra Pradesh', min: 850, modal: 1100, max: 1500, trend: 'up', change: 1.5 },
-      { name: 'Bengaluru', state: 'Karnataka', min: 1100, modal: 1400, max: 1800, trend: 'flat', change: 0.3 },
-    ],
-    trend7d: [1350, 1320, 1280, 1260, 1240, 1220, 1200],
-    insight: {
-      price_drivers: "Banana prices are softening as the summer crop from Jalgaon and Andhra arrives in volume. Excess production relative to cold storage capacity means fresh arrivals must clear quickly, keeping prices under pressure. Festival demand (Akshaya Tritiya) provided temporary support last week.",
-      best_mandi: "Bengaluru offers premium price at ₹1,400/q — strong retail and hotel/restaurant demand. Jalgaon and Thanjavur are wholesale origin markets with lower realization but higher volume throughput.",
-      forecast: "Prices likely to stabilize at ₹1,100–1,300/q range for next 4 weeks. G9 Cavendish export demand from Gulf countries should provide floor support. Domestic prices likely to firm up from July as summer heat reduces output.",
-      export: "India is world's largest banana producer but export share is small (~0.2% of production). Key export varieties: G9 Cavendish from Maharashtra and AP to Middle East. Growing fresh cut/processed export segment to EU.",
-      seasonal: "Year-round crop but two peak production windows: summer (Mar–May) from AP/Telangana and winter (Oct–Dec) from TN/Karnataka. Price dips during these peak windows. Best prices: July–September (monsoon gap)."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 1180, low: 1050, high: 1320 },
-      { label: 'Wk 2 (May 12)', price: 1160, low: 1030, high: 1300 },
-      { label: 'Wk 3 (May 19)', price: 1200, low: 1070, high: 1350 },
-      { label: 'Wk 4 (May 26)', price: 1250, low: 1100, high: 1420 },
-    ]
-  },
-  Grapes: {
-    emoji: '🍇',
-    unit: 'quintal',
-    basePrice: 3100,
-    mandis: [
-      { name: 'Sangli', state: 'Maharashtra', min: 2500, modal: 3100, max: 4000, trend: 'up', change: 0.9 },
-      { name: 'Nashik', state: 'Maharashtra', min: 2800, modal: 3500, max: 4500, trend: 'up', change: 1.5 },
-      { name: 'Solapur', state: 'Maharashtra', min: 2200, modal: 2800, max: 3600, trend: 'flat', change: 0.2 },
-      { name: 'Bijapur', state: 'Karnataka', min: 2000, modal: 2600, max: 3400, trend: 'dn', change: -1.1 },
-    ],
-    trend7d: [2950, 2980, 3020, 3050, 3070, 3090, 3100],
-    insight: {
-      price_drivers: "Grape season (Feb–May) is in full swing. Thompson Seedless from Nashik is commanding export premium. Domestic prices firm as raisin processing units compete with fresh market buyers. Summer heat beginning to affect berry quality, pushing quality growers to harvest faster.",
-      best_mandi: "Nashik is the premium market for export-quality grapes — ₹3,500/q modal. European export prices are at $1.8–2.2/kg FOB, making exports more lucrative than domestic sales for quality-certified growers.",
-      forecast: "Prices expected to hold through May then correct sharply (30–40%) as season ends in June. Post-June, any grapes available are raisin-grade quality — different price dynamic.",
-      export: "India exports ~3.5 lakh MT of grapes — primarily to Netherlands, UK, Russia, Bangladesh. Thompson Seedless accounts for 85% of export volume. Nashik district accounts for 60% of India's export grapes.",
-      seasonal: "Grape season: February to May. Peak quality and volume: March–April. Prices highest in Feb (early season) and again in May (end-of-season scarcity). Quality grading is critical — A-grade to export, B-grade to retail, C-grade to processing."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 3000, low: 2700, high: 3400 },
-      { label: 'Wk 2 (May 12)', price: 2800, low: 2400, high: 3200 },
-      { label: 'Wk 3 (May 19)', price: 2500, low: 2100, high: 2900 },
-      { label: 'Wk 4 (May 26)', price: 2100, low: 1700, high: 2600 },
-    ]
-  },
-  Pomegranate: {
-    emoji: '🍎',
-    unit: 'quintal',
-    basePrice: 8500,
-    mandis: [
-      { name: 'Solapur', state: 'Maharashtra', min: 7500, modal: 8500, max: 10000, trend: 'up', change: 2.3 },
-      { name: 'Nashik', state: 'Maharashtra', min: 8000, modal: 9200, max: 11000, trend: 'up', change: 1.8 },
-      { name: 'Bijapur', state: 'Karnataka', min: 6500, modal: 7800, max: 9500, trend: 'flat', change: 0.4 },
-      { name: 'Sangola', state: 'Maharashtra', min: 7000, modal: 8000, max: 9800, trend: 'up', change: 1.5 },
-    ],
-    trend7d: [8100, 8200, 8250, 8350, 8400, 8450, 8500],
-    insight: {
-      price_drivers: "Pomegranate prices remain strong due to sustained export demand — particularly from Turkey, Malaysia, and the UAE. Bhagwa variety continues to dominate export markets. Crop quality this season is above average due to favorable rainfall in Solapur-Bijapur belt. India now accounts for 22% of global pomegranate exports.",
-      best_mandi: "Nashik commands highest prices for export-grade pomegranate. Solapur is the volume market. For Bhagwa variety growers, direct linkages with exporters in Pune yield 15–20% better realization than mandi channel.",
-      forecast: "Prices expected to remain firm through May–June. Competition from Turkish and Spanish supply in European markets may create slight pressure by August. Middle East demand typically peaks during Ramadan (currently past) and Diwali season.",
-      export: "India exported 1.1 lakh MT of pomegranate worth ₹1,200 crore in FY24. UAE, Netherlands, UK are top destinations. FOB price: $1.8–2.5/kg for Bhagwa. Growing pharmaceutical demand for pomegranate extract is a new market segment.",
-      seasonal: "Two main crop seasons: Ambe bahar (Feb–May harvest) and Hasta bahar (Oct–Jan harvest). Ambe bahar is currently being marketed. Best prices typically in Hasta bahar (Oct–Dec) due to festival demand and global supply gap."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 8600, low: 8000, high: 9400 },
-      { label: 'Wk 2 (May 12)', price: 8700, low: 8100, high: 9600 },
-      { label: 'Wk 3 (May 19)', price: 8800, low: 8200, high: 9800 },
-      { label: 'Wk 4 (May 26)', price: 8900, low: 8300, high: 10000 },
-    ]
-  },
-  Lemon: {
-    emoji: '🍋',
-    unit: 'quintal',
-    basePrice: 2800,
-    mandis: [
-      { name: 'Nagpur', state: 'Maharashtra', min: 2200, modal: 2800, max: 3500, trend: 'up', change: 3.4 },
-      { name: 'Guntur', state: 'Andhra Pradesh', min: 1800, modal: 2300, max: 3000, trend: 'up', change: 2.1 },
-      { name: 'Anand', state: 'Gujarat', min: 2000, modal: 2500, max: 3200, trend: 'flat', change: 0.4 },
-      { name: 'Bengaluru', state: 'Karnataka', min: 2500, modal: 3100, max: 3800, trend: 'up', change: 2.8 },
-    ],
-    trend7d: [2400, 2500, 2550, 2620, 2700, 2760, 2800],
-    insight: {
-      price_drivers: "Lemon prices are spiking due to classic summer demand surge — lemonade, sherbets, hospitality sector. Arrivals from Nagpur and Andhra are lower than expected due to irregular rainfall during flowering. Small seasonal fruit size affecting quality grades.",
-      best_mandi: "Bengaluru and Nagpur offer best prices. Peak demand period is now (May–June) — ideal window to sell. Cold storage for lemon is limited in India, so fresh market clearing is primary channel.",
-      forecast: "Prices expected to peak in May–June (₹3,200–3,800/q) then correct by 40–50% post-monsoon. Monsoon typically brings heavy arrivals and price crash by July–August.",
-      export: "Lemon export primarily goes to Bangladesh, Nepal, UAE. India is a net exporter in season. Post-harvest losses are high (~30%) due to lack of cold chain — a significant opportunity area.",
-      seasonal: "Main crop: March–June and November–January. Summer demand is highest. Classic price spike every April–June due to demand-supply mismatch. Growers with irrigation access plant specifically for April–May harvest."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 3000, low: 2700, high: 3400 },
-      { label: 'Wk 2 (May 12)', price: 3200, low: 2900, high: 3700 },
-      { label: 'Wk 3 (May 19)', price: 3400, low: 3000, high: 3900 },
-      { label: 'Wk 4 (May 26)', price: 3100, low: 2700, high: 3600 },
-    ]
-  },
-  Coconut: {
-    emoji: '🥥',
-    unit: '1000 nuts',
-    basePrice: 1800,
-    mandis: [
-      { name: 'Ernakulam', state: 'Kerala', min: 1600, modal: 1800, max: 2100, trend: 'up', change: 0.5 },
-      { name: 'Coimbatore', state: 'Tamil Nadu', min: 1400, modal: 1650, max: 1900, trend: 'flat', change: 0.2 },
-      { name: 'Mangaluru', state: 'Karnataka', min: 1500, modal: 1750, max: 2000, trend: 'up', change: 0.8 },
-      { name: 'Nellore', state: 'Andhra Pradesh', min: 1300, modal: 1550, max: 1800, trend: 'dn', change: -0.9 },
-    ],
-    trend7d: [1750, 1760, 1770, 1775, 1785, 1793, 1800],
-    insight: {
-      price_drivers: "Coconut prices are steady with modest upward bias due to strong oil mill demand. Copra procurement by government agencies is providing price floor. Summer demand for tender coconut water is driving green coconut premium above dry coconut prices in urban markets.",
-      best_mandi: "Kerala mandis (Ernakulam) offer best prices and are closest to processing units. Tender coconut for direct consumption commands 2–3x the price of dry coconut in urban retail — a direct-to-consumer opportunity for farmers near cities.",
-      forecast: "Prices expected to remain stable through June. Post-monsoon may see slight increase as arrivals reduce temporarily. Long-term prices are supported by growing coconut oil and coconut water export trends.",
-      export: "India is world's largest coconut producer and top exporter of coconut products. Key exports: coconut oil, desiccated coconut, coir. Southeast Asia (Indonesia, Philippines) are main competitors.",
-      seasonal: "Year-round crop with 4 harvests per year (every 3 months). Prices relatively stable compared to seasonal vegetables. Main price variation: tender coconut peaks in summer (March–June), dry coconut peaks in wedding season (Nov–Feb)."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 1820, low: 1680, high: 1980 },
-      { label: 'Wk 2 (May 12)', price: 1840, low: 1700, high: 2000 },
-      { label: 'Wk 3 (May 19)', price: 1850, low: 1710, high: 2010 },
-      { label: 'Wk 4 (May 26)', price: 1860, low: 1720, high: 2020 },
-    ]
-  },
-  Guava: {
-    emoji: '🍐',
-    unit: 'quintal',
-    basePrice: 1100,
-    mandis: [
-      { name: 'Allahabad', state: 'Uttar Pradesh', min: 800, modal: 1100, max: 1500, trend: 'dn', change: -2.1 },
-      { name: 'Lucknow', state: 'Uttar Pradesh', min: 900, modal: 1200, max: 1600, trend: 'flat', change: 0.3 },
-      { name: 'Bhopal', state: 'Madhya Pradesh', min: 700, modal: 950, max: 1300, trend: 'dn', change: -3.2 },
-      { name: 'Dharwad', state: 'Karnataka', min: 850, modal: 1100, max: 1450, trend: 'up', change: 1.1 },
-    ],
-    trend7d: [1250, 1230, 1200, 1180, 1150, 1120, 1100],
-    insight: {
-      price_drivers: "Guava prices are under pressure as summer crop from UP and MP is in full swing. Arrivals from Allahabad (Prayagraj) — India's guava heartland — are at seasonal peak. Demand is steady for both fresh and processing (pulp, nectar) channels.",
-      best_mandi: "Lucknow offers marginally better prices than Allahabad. Processing unit demand from pulp manufacturers in Agra and Delhi is providing floor support. Direct linkage with juice companies (Dabur, Parle Agro) for pulp grade yields better than mandi prices.",
-      forecast: "Prices expected to stay depressed through June (₹900–1,100/q) then recover to ₹1,500–1,800/q by August–September when summer crop ends and festival demand builds.",
-      export: "India exports guava pulp and nectar — Bangladesh, UAE, UK are key markets. Fresh guava export is limited due to post-harvest challenges. Growing Vitamin C awareness is creating new demand for guava-based health products.",
-      seasonal: "Two main crops: summer (April–June) from UP/MP, winter (October–January) from Karnataka/AP. Winter crop commands 40–60% higher prices than summer. Best commercial opportunity: L49 and Allahabad Safeda varieties for processing."
-    },
-    forecast4w: [
-      { label: 'Wk 1 (May 5)', price: 1080, low: 900, high: 1280 },
-      { label: 'Wk 2 (May 12)', price: 1060, low: 880, high: 1260 },
-      { label: 'Wk 3 (May 19)', price: 1050, low: 870, high: 1250 },
-      { label: 'Wk 4 (May 26)', price: 1100, low: 900, high: 1300 },
-    ]
-  }
+// Commodity name mappings (AGMARKNET uses specific names)
+// Each array = all variant names for that commodity in AGMARKNET
+const COMM_MAP = {
+  Grapes:      ['Grapes', 'Grapes(Black)', 'Grapes(Green)', 'Grapes(White)'],
+  Apple:       ['Apple'],
+  Mango:       ['Mango', 'Mango (Totapuri)', 'Mango(Alphonso)', 'Mango(Banginapalli)', 'Mango(Dasheri)', 'Mango(Kesar)', 'Mango(Langra)'],
+  Pomegranate: ['Pomegranate'],
+  Orange:      ['Orange', 'Mosambi(Sweet Lime)'],
+  Coconut:     ['Coconut', 'Coconut(Dried)', 'Tender Coconut'],
+  Garlic:      ['Garlic'],
+  Ginger:      ['Ginger(Dry)', 'Ginger(Green)', 'Ginger'],
+  Onion:       ['Onion', 'Onion(Brown)', 'Onion Large', 'Onion Small'],
+  Potato:      ['Potato', 'Potato(Kufri Jyoti)', 'Potato(Desi)'],
 };
 
-// ─── INIT ──────────────────────────────────────────────────────────────
-function init() {
+const COMM_EMOJI = {
+  Grapes:'🍇', Apple:'🍎', Mango:'🥭', Pomegranate:'🫐', Orange:'🍊',
+  Coconut:'🥥', Garlic:'🧄', Ginger:'🫚', Onion:'🧅', Potato:'🥔'
+};
+
+const CHART_COLORS = ['#E8621A','#1B6B3A','#B8860B','#C8372D','#2563EB','#7C3AED','#0891B2','#059669','#D97706','#9333EA'];
+
+// Seasonal forecast multipliers per commodity
+const FORECASTS = {
+  Grapes:      [0.97, 0.93, 0.88, 0.82],
+  Apple:       [1.02, 1.04, 1.06, 1.08],
+  Mango:       [1.05, 1.10, 1.08, 0.95],
+  Pomegranate: [1.02, 1.04, 1.06, 1.07],
+  Orange:      [0.98, 0.97, 1.01, 1.04],
+  Coconut:     [1.01, 1.02, 1.01, 1.03],
+  Garlic:      [1.03, 1.05, 1.07, 1.04],
+  Ginger:      [0.98, 1.02, 1.05, 1.08],
+  Onion:       [1.04, 1.08, 1.13, 1.18],
+  Potato:      [1.01, 1.02, 1.03, 1.05],
+};
+
+// ── STATE ──────────────────────────────────────────────────────
+let currentComm = 'Grapes';
+let allData = {};       // { commodity: [records] }
+let barChart = null;
+let donutChart = null;
+
+// ── INIT ───────────────────────────────────────────────────────
+async function init() {
+  // Set date
   const now = new Date();
-  document.getElementById('lastUpdated').textContent = 
-    'Updated: ' + now.toLocaleDateString('en-IN', {day:'2-digit',month:'short'}) + 
-    ' ' + now.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
-  loadData();
-  getInsight('price_drivers');
+  document.getElementById('headerDate').textContent =
+    now.toLocaleDateString('en-IN', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+
+  await fetchAll();
 }
 
-function loadData() {
-  const data = commodityData[currentCommodity];
-  if (!data) return;
+// ── FETCH ALL COMMODITIES ──────────────────────────────────────
+async function fetchAll() {
+  document.getElementById('recordsStatus').innerHTML =
+    '<div class="ds-dot ds-orange" style="width:5px;height:5px;border-radius:50%;background:var(--saffron);"></div>Fetching records...';
 
-  // Filter by state
-  const filtered = currentState === 'All'
-    ? data.mandis
-    : data.mandis.filter(m => m.state === currentState);
+  // Fetch all 10 commodities in parallel
+  const promises = Object.keys(COMM_MAP).map(c => fetchCommodity(c));
+  await Promise.all(promises);
 
-  allMandiData = filtered;
+  const total = Object.values(allData).reduce((s, r) => s + r.length, 0);
+  document.getElementById('recordsStatus').innerHTML =
+    `<div class="ds-dot ds-green" style="width:5px;height:5px;border-radius:50%;background:#5DD68A;"></div>${total.toLocaleString('en-IN')} records loaded`;
 
-  // Update stats
-  const modals = filtered.map(m => m.modal);
+  updateTicker();
+  renderView();
+  renderSummary();
+}
+
+// ── FETCH ONE COMMODITY ────────────────────────────────────────
+async function fetchCommodity(comm) {
+  const names = COMM_MAP[comm];
+  let allRecords = [];
+
+  for (const name of names) {
+    try {
+      const url = `${API_BASE}?commodity=${encodeURIComponent(name)}`;
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const json = await res.json();
+      if (json.records && json.records.length > 0) {
+        allRecords = allRecords.concat(json.records);
+      }
+    } catch(e) {
+      console.warn('Fetch error for', name, e);
+    }
+  }
+
+  // Deduplicate by market name, keep highest modal
+  const seen = {};
+  for (const r of allRecords) {
+    const key = r.market || r.Market;
+    const modal = parseInt(r.modal_price || r.Modal_Price || 0);
+    if (!seen[key] || modal > seen[key].modal) {
+      seen[key] = {
+        market: r.market || r.Market || '—',
+        state: r.state || r.State || '—',
+        district: r.district || r.District || '—',
+        commodity: r.commodity || r.Commodity || comm,
+        min: parseInt(r.min_price || r.Min_Price || 0),
+        modal: modal,
+        max: parseInt(r.max_price || r.Max_Price || 0),
+        date: r.arrival_date || r.Arrival_Date || '—',
+      };
+    }
+  }
+
+  allData[comm] = Object.values(seen).filter(r => r.modal > 0).sort((a,b) => b.modal - a.modal);
+}
+
+// ── SELECT COMMODITY ───────────────────────────────────────────
+function selectComm(btn) {
+  document.querySelectorAll('.comm-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentComm = btn.dataset.c;
+  renderView();
+}
+
+// ── RENDER VIEW ────────────────────────────────────────────────
+function renderView() {
+  const records = allData[currentComm] || [];
+  const emoji = COMM_EMOJI[currentComm];
+
+  // Stats
+  if (records.length === 0) {
+    document.getElementById('sModal').textContent = '—';
+    document.getElementById('sCount').textContent = '0';
+    document.getElementById('sMax').textContent = '—';
+    document.getElementById('sMin').textContent = '—';
+    document.getElementById('sMaxMandi').textContent = 'No data';
+    document.getElementById('sMinMandi').textContent = 'No data';
+    document.getElementById('sTrend').textContent = 'No data';
+    document.getElementById('tableWrap').innerHTML =
+      `<div class="error-msg">No live data found for ${currentComm}. AGMARKNET may not have today's records yet — try refreshing later.</div>`;
+    return;
+  }
+
+  const modals = records.map(r => r.modal);
   const avgModal = Math.round(modals.reduce((a,b) => a+b, 0) / modals.length);
-  const maxEntry = filtered.reduce((a,b) => b.modal > a.modal ? b : a, filtered[0]);
-  const minEntry = filtered.reduce((a,b) => b.modal < a.modal ? b : a, filtered[0]);
+  const maxR = records[0];
+  const minR = records[records.length - 1];
 
-  document.getElementById('modalPrice').textContent = '₹' + avgModal.toLocaleString('en-IN');
-  document.getElementById('mandiCount').textContent = filtered.length;
-  document.getElementById('maxPrice').textContent = '₹' + (maxEntry?.max || 0).toLocaleString('en-IN');
-  document.getElementById('maxMandi').textContent = maxEntry ? maxEntry.name + ', ' + maxEntry.state : '—';
-  document.getElementById('minPrice').textContent = '₹' + (minEntry?.min || 0).toLocaleString('en-IN');
-  document.getElementById('minMandi').textContent = minEntry ? minEntry.name + ', ' + minEntry.state : '—';
+  document.getElementById('sModal').textContent = '₹' + avgModal.toLocaleString('en-IN');
+  document.getElementById('sCount').textContent = records.length;
+  document.getElementById('sCountSub').textContent = `mandis · ${records[0]?.date || 'today'}`;
+  document.getElementById('sMax').textContent = '₹' + maxR.max.toLocaleString('en-IN');
+  document.getElementById('sMaxMandi').textContent = maxR.market + ' · ' + maxR.state;
+  document.getElementById('sMin').textContent = '₹' + minR.min.toLocaleString('en-IN');
+  document.getElementById('sMinMandi').textContent = minR.market + ' · ' + minR.state;
 
-  // Modal change badge
-  const upCount = filtered.filter(m => m.trend === 'up').length;
-  const dnCount = filtered.filter(m => m.trend === 'dn').length;
-  const badge = document.getElementById('modalChange');
-  if (upCount > dnCount) {
-    badge.className = 'stat-badge up';
-    badge.textContent = '↑ Mostly rising';
-  } else if (dnCount > upCount) {
-    badge.className = 'stat-badge dn';
-    badge.textContent = '↓ Mostly falling';
+  // Trend badge (compare min vs modal spread as proxy)
+  const spread = ((maxR.modal - minR.modal) / avgModal * 100).toFixed(1);
+  const tb = document.getElementById('sTrend');
+  if (spread > 30) {
+    tb.className = 'stat-badge badge-up'; tb.textContent = '↑ High variance';
+  } else if (spread < 10) {
+    tb.className = 'stat-badge badge-flat'; tb.textContent = '→ Stable market';
   } else {
-    badge.className = 'stat-badge flat';
-    badge.textContent = '→ Mixed signals';
+    tb.className = 'stat-badge badge-up'; tb.textContent = '↑ Active market';
   }
 
-  // Update titles
-  document.getElementById('chartTitle').textContent = `${currentCommodity} — Price Trend (7 Days)`;
-  document.getElementById('tableTitle').textContent = `Top Mandis — ${currentCommodity}`;
-  document.getElementById('tableSubtitle').textContent = 
-    `Today's prices · ${filtered.length} mandis reporting · ₹/quintal`;
-  document.getElementById('forecastTitle').textContent = 
-    `${currentCommodity} — 4-Week AI Price Forecast`;
+  // Titles
+  document.getElementById('chartTitle').textContent = `${emoji} ${currentComm} — Top Mandis`;
+  document.getElementById('tableTitle').textContent = `${emoji} ${currentComm} — All Mandis`;
+  document.getElementById('tableSub').textContent =
+    `${records.length} mandis reporting · Min · Modal · Max · ₹/quintal`;
+  document.getElementById('fcTitle').textContent =
+    `${emoji} ${currentComm} — Price Outlook`;
 
-  // State counts
-  updateStateCounts(data.mandis);
-
-  // Charts
-  renderPriceChart(data);
-  renderDistChart(filtered);
-
-  // Table
-  renderMandiTable(filtered);
-
-  // Forecast
-  renderForecast(data.forecast4w, data.basePrice);
+  renderCharts();
+  renderTable(records);
+  renderForecast(avgModal);
 }
 
-function updateStateCounts(mandis) {
-  const counts = {};
-  mandis.forEach(m => { counts[m.state] = (counts[m.state] || 0) + 1; });
-  document.getElementById('totalCount').textContent = mandis.length;
-  document.getElementById('mhCount').textContent = counts['Maharashtra'] || 0;
-  document.getElementById('kaCount').textContent = counts['Karnataka'] || 0;
-  document.getElementById('apCount').textContent = counts['Andhra Pradesh'] || 0;
-  document.getElementById('upCount').textContent = counts['Uttar Pradesh'] || 0;
-  document.getElementById('rjCount').textContent = counts['Rajasthan'] || 0;
-  document.getElementById('tnCount').textContent = counts['Tamil Nadu'] || 0;
-}
+// ── CHARTS ─────────────────────────────────────────────────────
+function renderCharts() {
+  const records = allData[currentComm] || [];
+  if (!records.length) return;
 
-function renderPriceChart(data) {
-  const ctx = document.getElementById('priceChart').getContext('2d');
-  if (priceChart) priceChart.destroy();
+  const top12 = records.slice(0, 12);
 
-  const today = new Date();
-  const labels = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    labels.push(d.toLocaleDateString('en-IN', {day:'2-digit', month:'short'}));
-  }
-
-  priceChart = new Chart(ctx, {
-    type: 'line',
+  // Bar chart
+  const bCtx = document.getElementById('barChart').getContext('2d');
+  if (barChart) barChart.destroy();
+  barChart = new Chart(bCtx, {
+    type: 'bar',
     data: {
-      labels,
+      labels: top12.map(r => r.market.length > 14 ? r.market.slice(0,13)+'…' : r.market),
       datasets: [{
-        label: 'Modal Price (₹/q)',
-        data: data.trend7d,
-        borderColor: '#FF6B00',
-        backgroundColor: 'rgba(255,107,0,0.08)',
-        borderWidth: 2.5,
-        pointBackgroundColor: '#FF6B00',
-        pointRadius: 4,
-        fill: true,
-        tension: 0.4,
+        label: 'Modal ₹/q',
+        data: top12.map(r => r.modal),
+        backgroundColor: top12.map((_,i) => i === 0 ? 'rgba(232,98,26,0.85)' : 'rgba(232,98,26,0.35)'),
+        borderColor: 'rgba(232,98,26,0.9)',
+        borderWidth: 1,
+        borderRadius: 4,
+      }, {
+        label: 'Max ₹/q',
+        data: top12.map(r => r.max),
+        backgroundColor: 'rgba(184,134,11,0.15)',
+        borderColor: 'rgba(184,134,11,0.5)',
+        borderWidth: 1,
+        borderRadius: 4,
+        type: 'bar',
       }]
     },
     options: {
@@ -1284,56 +938,58 @@ function renderPriceChart(data) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => '₹' + ctx.parsed.y.toLocaleString('en-IN') + '/q'
+            label: ctx => ctx.dataset.label + ': ₹' + ctx.parsed.y.toLocaleString('en-IN')
           }
         }
       },
       scales: {
         x: {
-          grid: { color: '#EDE8E0' },
-          ticks: { font: { family: 'DM Mono', size: 10 }, color: '#7A7068' }
+          grid: { display: false },
+          ticks: { font: { family: 'DM Mono', size: 9 }, color: '#7A6F65', maxRotation: 35 }
         },
         y: {
-          grid: { color: '#EDE8E0' },
+          grid: { color: '#E5DDD3' },
           ticks: {
-            font: { family: 'DM Mono', size: 10 },
-            color: '#7A7068',
+            font: { family: 'DM Mono', size: 9 },
+            color: '#7A6F65',
             callback: v => '₹' + v.toLocaleString('en-IN')
           }
         }
       }
     }
   });
-}
 
-function renderDistChart(mandis) {
-  const ctx = document.getElementById('distChart').getContext('2d');
-  if (distChart) distChart.destroy();
+  // Donut — by state
+  const stateMap = {};
+  for (const r of records) {
+    if (!stateMap[r.state]) stateMap[r.state] = [];
+    stateMap[r.state].push(r.modal);
+  }
+  const stateLabels = Object.keys(stateMap).sort((a,b) =>
+    (stateMap[b].reduce((x,y)=>x+y,0)/stateMap[b].length) -
+    (stateMap[a].reduce((x,y)=>x+y,0)/stateMap[a].length)
+  ).slice(0, 8);
+  const stateAvgs = stateLabels.map(s =>
+    Math.round(stateMap[s].reduce((a,b) => a+b, 0) / stateMap[s].length)
+  );
 
-  const stateGroups = {};
-  mandis.forEach(m => {
-    if (!stateGroups[m.state]) stateGroups[m.state] = [];
-    stateGroups[m.state].push(m.modal);
-  });
-
-  const labels = Object.keys(stateGroups);
-  const values = labels.map(s => Math.round(stateGroups[s].reduce((a,b)=>a+b,0)/stateGroups[s].length));
-  const colors = ['#FF6B00','#1A7A4A','#D4A017','#E63946','#7B2D8B','#2196F3','#FF5722'];
-
-  distChart = new Chart(ctx, {
+  const dCtx = document.getElementById('donutChart').getContext('2d');
+  if (donutChart) donutChart.destroy();
+  donutChart = new Chart(dCtx, {
     type: 'doughnut',
     data: {
-      labels,
+      labels: stateLabels,
       datasets: [{
-        data: values,
-        backgroundColor: colors.slice(0, labels.length),
+        data: stateAvgs,
+        backgroundColor: CHART_COLORS.slice(0, stateLabels.length),
         borderWidth: 2,
-        borderColor: '#FAF6F0'
+        borderColor: '#FFFCF8'
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      cutout: '62%',
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -1346,172 +1002,115 @@ function renderDistChart(mandis) {
   });
 
   // Legend
-  const legend = document.getElementById('distLegend');
-  legend.innerHTML = labels.map((l, i) =>
-    `<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
-      <div style="width:10px;height:10px;border-radius:2px;background:${colors[i]};flex-shrink:0;"></div>
-      <span style="flex:1">${l}</span>
-      <span style="font-weight:500;color:var(--charcoal)">₹${values[i].toLocaleString('en-IN')}/q</span>
-    </div>`
-  ).join('');
-}
-
-function renderMandiTable(mandis) {
-  const tbody = document.getElementById('mandiTableBody');
-  if (!mandis.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No mandis reporting for this filter</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = mandis.map(m => `
-    <tr>
-      <td><div class="mandi-name">${m.name}</div></td>
-      <td><div class="state-name">${m.state}</div></td>
-      <td class="price-cell" style="color:var(--muted)">₹${m.min.toLocaleString('en-IN')}</td>
-      <td class="price-cell" style="color:var(--charcoal)">₹${m.modal.toLocaleString('en-IN')}</td>
-      <td class="price-cell" style="color:var(--gold)">₹${m.max.toLocaleString('en-IN')}</td>
-      <td>
-        <span class="trend-pill ${m.trend}">
-          ${m.trend === 'up' ? '↑' : m.trend === 'dn' ? '↓' : '→'}
-          ${Math.abs(m.change)}%
-        </span>
-      </td>
-    </tr>
+  document.getElementById('distLegend').innerHTML = stateLabels.map((s, i) => `
+    <div class="dl-row">
+      <div class="dl-dot" style="background:${CHART_COLORS[i]}"></div>
+      <span class="dl-name">${s}</span>
+      <span class="dl-price">₹${stateAvgs[i].toLocaleString('en-IN')}</span>
+    </div>
   `).join('');
 }
 
-function renderForecast(weeks, basePrice) {
-  const container = document.getElementById('forecastRow');
-  const maxPrice = Math.max(...weeks.map(w => w.price));
-  const minPrice2 = Math.min(...weeks.map(w => w.price));
+// ── TABLE ──────────────────────────────────────────────────────
+function renderTable(records) {
+  const rows = records.map(r => {
+    const spread = r.max - r.min;
+    const pct = r.modal > 0 ? ((spread / r.modal) * 100).toFixed(0) : 0;
+    let tClass = 'tt-flat', tLabel = '→ Stable';
+    if (pct > 30) { tClass = 'tt-up'; tLabel = '↑ Wide range'; }
+    else if (r.modal > r.min * 1.1) { tClass = 'tt-up'; tLabel = '↑ Active'; }
 
-  container.innerHTML = weeks.map((w, i) => {
-    const change = ((w.price - basePrice) / basePrice * 100).toFixed(1);
-    const isUp = w.price >= basePrice;
-    const intensity = (w.price - minPrice2) / (maxPrice - minPrice2);
-    const bg = isUp ? `rgba(26,122,74,${0.05 + intensity * 0.1})` : `rgba(230,57,70,${0.05 + (1-intensity) * 0.1})`;
     return `
-    <div class="forecast-week" style="background:${bg}; border-color: ${isUp ? 'rgba(26,122,74,0.2)' : 'rgba(230,57,70,0.2)'}">
-      <div class="fw-label">${w.label}</div>
-      <div class="fw-price" style="color:${isUp ? 'var(--india-green)' : 'var(--red-alert)'}">
-        ₹${w.price.toLocaleString('en-IN')}
-      </div>
-      <div class="fw-range">₹${w.low.toLocaleString('en-IN')} – ₹${w.high.toLocaleString('en-IN')}</div>
-      <div style="font-size:0.6rem;margin-top:4px;color:${isUp ? 'var(--india-green)' : 'var(--red-alert)'}">
-        ${isUp ? '↑' : '↓'} ${Math.abs(change)}% vs today
-      </div>
-    </div>
-  `;}).join('');
+    <tr>
+      <td><div class="td-mandi">${r.market}</div></td>
+      <td><div class="td-state">${r.state}</div></td>
+      <td><span class="td-min">₹${r.min.toLocaleString('en-IN')}</span></td>
+      <td><span class="td-price td-modal">₹${r.modal.toLocaleString('en-IN')}</span></td>
+      <td><span class="td-max">₹${r.max.toLocaleString('en-IN')}</span></td>
+      <td><div class="td-state">${r.commodity}</div></td>
+      <td><span class="trend-tag ${tClass}">${tLabel}</span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tableWrap').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Mandi</th>
+          <th>State</th>
+          <th>Min</th>
+          <th>Modal</th>
+          <th>Max</th>
+          <th>Variety</th>
+          <th>Signal</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="source-note">AGMARKNET via data.gov.in · ${records[0]?.date || 'Today'} · Prices in ₹/quintal</div>
+  `;
 }
 
-// ─── AI INSIGHT ────────────────────────────────────────────────────────
-async function getInsight(type) {
-  // Update chips
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  event && event.target && event.target.classList && event.target.classList.add('active');
+// ── FORECAST ───────────────────────────────────────────────────
+function renderForecast(basePrice) {
+  const mults = FORECASTS[currentComm] || [1, 1, 1, 1];
+  const today = new Date();
 
-  const data = commodityData[currentCommodity];
-  const insightText = data?.insight?.[type];
+  const cards = mults.map((m, i) => {
+    const wDate = new Date(today);
+    wDate.setDate(wDate.getDate() + (i + 1) * 7);
+    const price = Math.round(basePrice * m);
+    const low = Math.round(price * 0.92);
+    const high = Math.round(price * 1.08);
+    const isUp = price >= basePrice;
+    const chg = (((price - basePrice) / basePrice) * 100).toFixed(1);
+    const color = isUp ? 'var(--green)' : 'var(--red)';
+    const bg = isUp ? 'rgba(27,107,58,0.04)' : 'rgba(200,55,45,0.04)';
+    const border = isUp ? 'rgba(27,107,58,0.2)' : 'rgba(200,55,45,0.2)';
 
-  if (insightText) {
-    // Use local insight data instantly, then enhance with AI
-    document.getElementById('aiContent').textContent = insightText;
-    // Optionally call AI for dynamic query
-    return;
-  }
+    return `
+    <div class="fc-card" style="background:${bg};border-color:${border}">
+      <div class="fc-week">Wk ${i+1} · ${wDate.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</div>
+      <div class="fc-price" style="color:${color}">₹${price.toLocaleString('en-IN')}</div>
+      <div class="fc-range">₹${low.toLocaleString('en-IN')} – ₹${high.toLocaleString('en-IN')}</div>
+      <div class="fc-dir" style="color:${color}">${isUp ? '↑' : '↓'} ${Math.abs(chg)}% vs now</div>
+    </div>`;
+  }).join('');
 
-  document.getElementById('aiContent').innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div> Generating insight...</div>';
-
-  // Call Anthropic API for dynamic insights
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are MandiAI, an expert in Indian agricultural markets with deep knowledge of mandi price dynamics, seasonal patterns, APEDA export data, and AGMARKNET pricing trends. Give concise, practical intelligence for traders and farmers. Always mention specific mandis, states, prices in ₹/quintal, and actionable insights. Be direct and data-driven. Respond in 3-4 sentences max.`,
-        messages: [{
-          role: 'user',
-          content: `For ${currentCommodity} in Indian mandi markets right now (April-May 2026): ${type.replace(/_/g,' ')} insight please.`
-        }]
-      })
-    });
-    const json = await resp.json();
-    const text = json.content?.[0]?.text || 'Unable to generate insight.';
-    document.getElementById('aiContent').textContent = text;
-  } catch(e) {
-    document.getElementById('aiContent').textContent = insightText || 'Insight unavailable. Please check connection.';
-  }
+  document.getElementById('fcGrid').innerHTML = cards;
 }
 
-// ─── ASK MANDIAI ──────────────────────────────────────────────────────
-async function askMandiAI() {
-  const query = document.getElementById('aiQuery').value.trim();
-  if (!query) return;
+// ── TICKER ─────────────────────────────────────────────────────
+function updateTicker() {
+  const items = Object.keys(allData).map(c => {
+    const recs = allData[c];
+    if (!recs || !recs.length) return null;
+    const avg = Math.round(recs.reduce((s, r) => s + r.modal, 0) / recs.length);
+    const topMandi = recs[0]?.market || '—';
+    const emoji = COMM_EMOJI[c];
+    return `<div class="ticker-item">${emoji} ${c} · ${topMandi} · <span class="t-up">₹${avg.toLocaleString('en-IN')}/q</span></div>`;
+  }).filter(Boolean);
 
-  const btn = document.getElementById('askBtn');
-  btn.disabled = true;
-  btn.textContent = '...';
-
-  document.getElementById('aiContent').innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div> Thinking...</div>';
-
-  const data = commodityData[currentCommodity];
-  const context = `Current ${currentCommodity} data: Modal price ₹${data.basePrice}/q. Mandis tracked: ${data.mandis.length}. Top mandi: ${data.mandis[0]?.name}. Trend: ${data.mandis.filter(m=>m.trend==='up').length > data.mandis.filter(m=>m.trend==='dn').length ? 'mostly rising' : 'mixed/falling'}.`;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are MandiAI — an expert in Indian agricultural market intelligence. You have deep knowledge of AGMARKNET price data, mandi operations, seasonal crop patterns, APEDA export data, and supply chain dynamics for Indian fruits and vegetables. Be concise, specific, and practical. Always use ₹/quintal as unit unless export context. Mention specific mandis, states, and numbers when possible.`,
-        messages: [{
-          role: 'user',
-          content: `Context: ${context}\n\nUser question: ${query}`
-        }]
-      })
-    });
-    const json = await resp.json();
-    const text = json.content?.[0]?.text || 'Unable to answer. Try again.';
-    document.getElementById('aiContent').textContent = text;
-  } catch(e) {
-    document.getElementById('aiContent').textContent = 'Error connecting to MandiAI. Please try again.';
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'Ask';
-  document.getElementById('aiQuery').value = '';
+  const doubled = [...items, ...items].join('');
+  document.getElementById('tickerTrack').innerHTML = doubled;
 }
 
-// ─── SELECTORS ────────────────────────────────────────────────────────
-function selectCommodity(btn) {
-  document.querySelectorAll('.comm-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentCommodity = btn.dataset.commodity;
-  currentState = 'All';
-  document.querySelectorAll('.state-item').forEach(s => s.classList.remove('active'));
-  document.querySelector('.state-item[data-state="All"]').classList.add('active');
-  loadData();
-  getInsight('price_drivers');
+// ── SUMMARY ────────────────────────────────────────────────────
+function renderSummary() {
+  const lines = Object.keys(allData).map(c => {
+    const recs = allData[c];
+    if (!recs || !recs.length) return `<div class="dl-row" style="margin-bottom:6px"><span style="font-size:1rem">${COMM_EMOJI[c]}</span><span class="dl-name" style="font-size:0.68rem;">${c}</span><span class="dl-price" style="font-size:0.65rem;color:var(--muted);">No data</span></div>`;
+    const avg = Math.round(recs.reduce((s,r) => s+r.modal, 0) / recs.length);
+    return `<div class="dl-row" style="margin-bottom:6px"><span style="font-size:1rem">${COMM_EMOJI[c]}</span><span class="dl-name" style="font-size:0.68rem;">${c}</span><span class="dl-price" style="font-size:0.68rem;">₹${avg.toLocaleString('en-IN')}</span></div>`;
+  }).join('');
+
+  document.getElementById('summaryBody').innerHTML = `
+    <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.6rem;">Avg Modal · ₹/quintal</div>
+    ${lines}
+  `;
 }
 
-function selectState(item) {
-  document.querySelectorAll('.state-item').forEach(s => s.classList.remove('active'));
-  item.classList.add('active');
-  currentState = item.dataset.state;
-  loadData();
-}
-
-function clearStateFilter() {
-  currentState = 'All';
-  document.querySelectorAll('.state-item').forEach(s => s.classList.remove('active'));
-  document.querySelector('.state-item[data-state="All"]').classList.add('active');
-  loadData();
-}
-
-// ─── START ─────────────────────────────────────────────────────────────
+// ── START ──────────────────────────────────────────────────────
 init();
 </script>
 </body>
