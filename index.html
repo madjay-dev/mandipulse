@@ -624,6 +624,21 @@ tbody tr:hover td { background: var(--cream); }
       </div>
     </div>
 
+    <!-- STATE FILTER -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Filter by State</div>
+        <button class="refresh-btn" onclick="clearState()">All</button>
+      </div>
+      <div class="card-body" style="padding:0.4rem 0.75rem 0.75rem;">
+        <select id="stateSelect" onchange="onStateChange()"
+          style="width:100%;padding:0.55rem 0.7rem;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:0.7rem;background:var(--cream);color:var(--charcoal);cursor:pointer;outline:none;">
+          <option value="">All India</option>
+        </select>
+        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:0.5rem;" id="stateCount">Select a state to filter mandis</div>
+      </div>
+    </div>
+
     <!-- SUMMARY CARD -->
     <div class="card">
       <div class="card-head"><div class="card-title">Market Summary</div></div>
@@ -686,20 +701,7 @@ tbody tr:hover td { background: var(--cream); }
       </div>
     </div>
 
-    <!-- MANDI TABLE -->
-    <div class="card">
-      <div class="card-head">
-        <div>
-          <div class="card-title" id="tableTitle">Mandi Prices</div>
-          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;" id="tableSub">Min · Modal · Max · ₹/quintal</div>
-        </div>
-      </div>
-      <div id="tableWrap">
-        <div class="loading-row"><div class="spinner"></div>Fetching live mandi data from AGMARKNET...</div>
-      </div>
-    </div>
-
-    <!-- FORECAST -->
+    <!-- FORECAST — above table -->
     <div class="card">
       <div class="card-head">
         <div>
@@ -714,6 +716,19 @@ tbody tr:hover td { background: var(--cream); }
           <div class="fc-card" style="opacity:0.4">—</div>
           <div class="fc-card" style="opacity:0.4">—</div>
         </div>
+      </div>
+    </div>
+
+    <!-- MANDI TABLE — below forecast -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title" id="tableTitle">Mandi Prices</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;" id="tableSub">Min · Modal · Max · ₹/quintal</div>
+        </div>
+      </div>
+      <div id="tableWrap">
+        <div class="loading-row"><div class="spinner"></div>Fetching live mandi data from AGMARKNET...</div>
       </div>
     </div>
 
@@ -837,17 +852,57 @@ async function fetchCommodity(comm) {
 }
 
 // ── SELECT COMMODITY ───────────────────────────────────────────
+let currentState = '';
+
 function selectComm(btn) {
   document.querySelectorAll('.comm-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentComm = btn.dataset.c;
+  currentState = '';
+  document.getElementById('stateSelect').value = '';
   renderView();
+}
+
+// ── STATE FILTER ────────────────────────────────────────────────
+function onStateChange() {
+  currentState = document.getElementById('stateSelect').value;
+  renderView();
+}
+
+function clearState() {
+  currentState = '';
+  document.getElementById('stateSelect').value = '';
+  renderView();
+}
+
+function populateStateDropdown(records) {
+  const states = [...new Set(records.map(r => r.state))].filter(Boolean).sort();
+  const sel = document.getElementById('stateSelect');
+  // Keep "All India" option, rebuild the rest
+  sel.innerHTML = '<option value="">All India</option>' +
+    states.map(s => `<option value="${s}"${s === currentState ? ' selected' : ''}>${s}</option>`).join('');
 }
 
 // ── RENDER VIEW ────────────────────────────────────────────────
 function renderView() {
-  const records = allData[currentComm] || [];
+  const allRecords = allData[currentComm] || [];
   const emoji = COMM_EMOJI[currentComm];
+
+  // Populate state dropdown from full dataset
+  populateStateDropdown(allRecords);
+
+  // Apply state filter
+  const records = currentState
+    ? allRecords.filter(r => r.state === currentState)
+    : allRecords;
+
+  // Update state count label
+  const stateCountEl = document.getElementById('stateCount');
+  if (currentState) {
+    stateCountEl.textContent = `${records.length} mandis in ${currentState}`;
+  } else {
+    stateCountEl.textContent = `${allRecords.length} mandis across India`;
+  }
 
   // Stats
   if (records.length === 0) {
