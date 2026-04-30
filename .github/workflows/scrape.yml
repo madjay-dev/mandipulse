@@ -1,0 +1,31 @@
+name: MandiPulse Daily Scraper
+
+on:
+  schedule:
+    - cron: '30 1 * * *'  # Runs daily at 7:00 AM IST (1:30 UTC)
+  workflow_dispatch:        # Allows manual trigger anytime
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests supabase
+
+      - name: Run scraper
+        env:
+          SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          AGMARKNET_KEY:        ${{ secrets.AGMARKNET_KEY }}
+        run: |
+          python scraper/scrape.py
