@@ -10,544 +10,150 @@
 <style>
 :root {
   --saffron: #E8621A;
-  --saffron-light: #F07840;
   --saffron-pale: #FDF3EC;
   --green: #1B6B3A;
-  --green-light: #238A4B;
   --green-pale: #EBF5EF;
   --soil: #1E1208;
   --soil-2: #2D1C0E;
   --cream: #F8F4EE;
   --cream-2: #F0EBE2;
-  --white: #FFFCF8;
   --charcoal: #1A1612;
   --muted: #7A6F65;
   --border: #E5DDD3;
-  --border-2: #D4CAC0;
   --red: #C8372D;
   --gold: #B8860B;
   --card: #FFFFFF;
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Sans',sans-serif; background:var(--cream); color:var(--charcoal); min-height:100vh; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Noto Sans', sans-serif;
-  background: var(--cream);
-  color: var(--charcoal);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── HEADER ─────────────────────────────────────────────── */
+/* HEADER */
 header {
-  background: var(--soil);
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  border-bottom: 2px solid var(--saffron);
+  background:var(--soil); height:60px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 2rem; position:sticky; top:0; z-index:200;
+  border-bottom:2px solid var(--saffron);
 }
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-icon { width:34px; height:34px; background:var(--saffron); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:17px; }
+.logo-name { font-family:'Syne',sans-serif; font-weight:800; font-size:1.25rem; color:#fff; letter-spacing:-0.5px; }
+.logo-name span { color:var(--saffron); }
+.logo-tag { font-family:'DM Mono',monospace; font-size:0.58rem; color:rgba(255,255,255,0.35); letter-spacing:2px; text-transform:uppercase; margin-top:1px; }
+.header-right { display:flex; align-items:center; gap:1rem; }
+.live-pill { display:flex; align-items:center; gap:5px; background:rgba(27,107,58,0.2); border:1px solid rgba(27,107,58,0.5); border-radius:20px; padding:3px 10px; font-family:'DM Mono',monospace; font-size:0.62rem; color:#5DD68A; letter-spacing:1.5px; text-transform:uppercase; }
+.live-dot { width:5px; height:5px; background:#5DD68A; border-radius:50%; animation:blink 1.8s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.header-date { font-family:'DM Mono',monospace; font-size:0.62rem; color:rgba(255,255,255,0.3); }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* STATUS */
+.status-bar { background:var(--soil-2); padding:0.4rem 2rem; display:flex; align-items:center; gap:1.5rem; font-family:'DM Mono',monospace; font-size:0.6rem; color:rgba(255,255,255,0.35); }
+.sb-dot { width:5px; height:5px; border-radius:50%; background:#5DD68A; display:inline-block; margin-right:5px; }
+.sb-dot.loading { background:var(--saffron); animation:blink 1s infinite; }
+
+/* TICKER */
+.ticker-wrap { background:var(--saffron); height:32px; overflow:hidden; display:flex; align-items:center; }
+.ticker-track { display:flex; gap:3rem; animation:ticker 35s linear infinite; white-space:nowrap; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item { font-family:'DM Mono',monospace; font-size:0.65rem; font-weight:500; color:var(--soil); }
+
+/* FILTER BAR */
+.filter-bar {
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  padding:1rem 2rem;
+  display:grid;
+  grid-template-columns:180px 1fr 220px;
+  gap:1.5rem;
+  align-items:end;
 }
-
-.logo-icon {
-  width: 34px; height: 34px;
-  background: var(--saffron);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px;
-  flex-shrink: 0;
-}
-
-.logo-name {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.25rem;
-  color: #fff;
-  letter-spacing: -0.5px;
-}
-
-.logo-name span { color: var(--saffron); }
-
-.logo-tag {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  color: rgba(255,255,255,0.35);
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  margin-top: 1px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-
-.live-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(27,107,58,0.2);
-  border: 1px solid rgba(27,107,58,0.5);
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: #5DD68A;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.live-dot {
-  width: 5px; height: 5px;
-  background: #5DD68A;
-  border-radius: 50%;
-  animation: blink 1.8s ease-in-out infinite;
-}
-
-@keyframes blink {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.2; }
-}
-
-.header-date {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.3);
-}
-
-/* ── TICKER ─────────────────────────────────────────────── */
-.ticker-wrap {
-  background: var(--saffron);
-  height: 34px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.ticker-track {
-  display: flex;
-  gap: 3rem;
-  animation: ticker 35s linear infinite;
-  white-space: nowrap;
-}
-
-@keyframes ticker {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.ticker-item {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--soil);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.t-up { color: #0D3D1A; font-weight: 600; }
-.t-dn { color: #5A0F0A; font-weight: 600; }
-
-/* ── LAYOUT ─────────────────────────────────────────────── */
-.layout {
-  max-width: 1380px;
-  margin: 0 auto;
-  padding: 1.5rem 1.5rem 3rem;
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 1.25rem;
-  align-items: start;
-}
-
-/* ── SIDEBAR ─────────────────────────────────────────────── */
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  position: sticky;
-  top: 78px;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.card-head {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.card-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--charcoal);
-}
-
-.card-body { padding: 0.75rem; }
-
-/* ── COMMODITY BUTTONS ──────────────────────────────────── */
-.section-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--muted);
-  padding: 0.5rem 0.75rem 0.25rem;
-}
-
-.comm-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.4rem;
-  padding: 0 0.75rem 0.75rem;
-}
-
-.comm-btn {
-  border: 1.5px solid var(--border);
-  background: var(--cream);
-  border-radius: 8px;
-  padding: 0.55rem 0.3rem;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.18s ease;
-  font-family: 'Noto Sans', sans-serif;
-}
-
-.comm-btn:hover {
-  border-color: var(--saffron);
-  background: var(--saffron-pale);
-  transform: translateY(-1px);
-}
-
-.comm-btn.active {
-  border-color: var(--saffron);
-  background: var(--saffron);
-  color: white;
-  box-shadow: 0 3px 10px rgba(232,98,26,0.3);
-}
-
-.comm-emoji { font-size: 1.2rem; display: block; margin-bottom: 2px; }
-.comm-name { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3px; }
-
-/* ── MAIN ───────────────────────────────────────────────── */
-.main {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-/* ── STAT ROW ───────────────────────────────────────────── */
-.stat-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.1rem 1.1rem 0.9rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 12px 12px 0 0;
-}
-
-.sc-orange::after { background: var(--saffron); }
-.sc-green::after { background: var(--green); }
-.sc-gold::after { background: var(--gold); }
-.sc-red::after { background: var(--red); }
-
-.stat-label {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 1.8px;
-  color: var(--muted);
-  margin-bottom: 0.45rem;
-}
-
-.stat-val {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.6rem;
-  color: var(--charcoal);
-  line-height: 1;
-  letter-spacing: -1px;
-}
-
-.stat-sub {
-  font-size: 0.62rem;
-  color: var(--muted);
-  margin-top: 0.3rem;
-  font-family: 'DM Mono', monospace;
-}
-
-.stat-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 8px;
-  margin-top: 0.35rem;
-  font-family: 'DM Mono', monospace;
-}
-
-.badge-up { background: var(--green-pale); color: var(--green); }
-.badge-dn { background: #FDECEA; color: var(--red); }
-.badge-flat { background: var(--cream-2); color: var(--muted); }
-
-/* ── CHART ROW ──────────────────────────────────────────── */
-.chart-row {
-  display: grid;
-  grid-template-columns: 1.8fr 1fr;
-  gap: 1.25rem;
-}
-
-.chart-wrap { height: 240px; position: relative; }
-
-/* ── TABLE ──────────────────────────────────────────────── */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.72rem;
-}
-
-thead th {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--muted);
-  padding: 0.5rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--cream);
-  text-align: left;
-  font-weight: 500;
-}
-
-tbody td {
-  padding: 0.65rem 0.9rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--charcoal);
-}
-
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: var(--cream); }
-
-.td-mandi { font-weight: 600; font-size: 0.75rem; }
-.td-state { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.62rem; }
-.td-price { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; }
-.td-modal { color: var(--charcoal); }
-.td-min { color: var(--muted); font-size: 0.7rem; font-family: 'DM Mono', monospace; }
-.td-max { color: var(--gold); font-size: 0.7rem; font-family: 'DM Mono', monospace; }
-
-.trend-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-family: 'DM Mono', monospace;
-}
-
-.tt-up { background: var(--green-pale); color: var(--green); }
-.tt-dn { background: #FDECEA; color: var(--red); }
-.tt-flat { background: var(--cream-2); color: var(--muted); }
-
-/* ── FORECAST ───────────────────────────────────────────── */
-.forecast-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-}
-
-.fc-card {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.9rem 0.75rem;
-  text-align: center;
-  background: var(--cream);
-}
-
-.fc-week {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--muted);
-  margin-bottom: 0.4rem;
-}
-
-.fc-price {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.05rem;
-  margin-bottom: 0.2rem;
-}
-
-.fc-range {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  color: var(--muted);
-}
-
-.fc-dir {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  font-weight: 600;
-  margin-top: 0.3rem;
-}
-
-/* ── SOURCE NOTE ─────────────────────────────────────────── */
-.source-note {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.58rem;
-  color: var(--muted);
-  padding: 0.5rem 0.9rem;
-  text-align: right;
-  border-top: 1px solid var(--border);
-}
-
-/* ── LOADING / ERROR ─────────────────────────────────────── */
-.loading-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 2rem;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-}
-
-.spinner {
-  width: 16px; height: 16px;
-  border: 2px solid var(--border);
-  border-top-color: var(--saffron);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.empty {
-  text-align: center;
-  padding: 2.5rem;
-  color: var(--muted);
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-}
-
-.error-msg {
-  background: #FFF0EF;
-  border: 1px solid #F5C6C3;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  font-size: 0.72rem;
-  color: var(--red);
-  font-family: 'DM Mono', monospace;
-  margin: 0.75rem;
-}
-
-/* ── REFRESH BTN ─────────────────────────────────────────── */
-.refresh-btn {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 3px 9px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.refresh-btn:hover { border-color: var(--saffron); color: var(--saffron); }
-
-/* ── DIST LEGEND ─────────────────────────────────────────── */
-.dist-legend {
-  font-size: 0.65rem;
-  line-height: 1.8;
-  padding-top: 0.5rem;
-}
-
-.dl-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.dl-dot {
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.dl-name { flex: 1; color: var(--muted); }
-.dl-price { font-weight: 600; color: var(--charcoal); font-family: 'DM Mono', monospace; }
-
-/* ── DATA STATUS BAR ─────────────────────────────────────── */
-.data-status {
-  background: var(--soil-2);
-  padding: 0.5rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.4);
-}
-
-.ds-item { display: flex; align-items: center; gap: 5px; }
-.ds-dot { width: 5px; height: 5px; border-radius: 50%; }
-.ds-green { background: #5DD68A; }
-.ds-orange { background: var(--saffron); }
-
-@media (max-width: 960px) {
-  .layout { grid-template-columns: 1fr; }
-  .stat-row { grid-template-columns: repeat(2, 1fr); }
-  .chart-row { grid-template-columns: 1fr; }
-  .forecast-grid { grid-template-columns: repeat(2, 1fr); }
-  .sidebar { position: static; }
+.filter-group { display:flex; flex-direction:column; gap:0.5rem; }
+.filter-label { font-family:'DM Mono',monospace; font-size:0.58rem; text-transform:uppercase; letter-spacing:1.8px; color:var(--muted); }
+
+/* Category pills */
+.cat-pills { display:flex; gap:0.5rem; }
+.cat-pill { padding:0.45rem 1.1rem; border:1.5px solid var(--border); border-radius:20px; font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; cursor:pointer; background:var(--cream); color:var(--muted); transition:all 0.15s; }
+.cat-pill:hover { border-color:var(--saffron); color:var(--saffron); }
+.cat-pill.active { background:var(--saffron); border-color:var(--saffron); color:white; }
+
+/* SKU pills */
+.sku-pills { display:flex; gap:0.4rem; flex-wrap:wrap; }
+.sku-pill { padding:0.4rem 0.85rem; border:1.5px solid var(--border); border-radius:8px; font-size:0.68rem; cursor:pointer; background:var(--cream); color:var(--charcoal); transition:all 0.15s; display:flex; align-items:center; gap:5px; }
+.sku-pill:hover { border-color:var(--saffron); background:var(--saffron-pale); }
+.sku-pill.active { background:var(--saffron); border-color:var(--saffron); color:white; }
+
+/* State select */
+.state-select { width:100%; padding:0.5rem 0.8rem; border:1.5px solid var(--border); border-radius:8px; font-family:'DM Mono',monospace; font-size:0.7rem; background:var(--cream); color:var(--charcoal); cursor:pointer; outline:none; transition:border-color 0.15s; }
+.state-select:focus { border-color:var(--saffron); }
+
+/* MAIN */
+.main { max-width:1380px; margin:0 auto; padding:1.5rem 2rem 3rem; display:flex; flex-direction:column; gap:1.25rem; }
+
+/* STAT ROW */
+.stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.1rem 1.1rem 0.9rem; position:relative; overflow:hidden; }
+.stat-card::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:12px 12px 0 0; }
+.sc-orange::after { background:var(--saffron); }
+.sc-green::after  { background:var(--green); }
+.sc-gold::after   { background:var(--gold); }
+.sc-red::after    { background:var(--red); }
+.stat-label { font-family:'DM Mono',monospace; font-size:0.58rem; text-transform:uppercase; letter-spacing:1.8px; color:var(--muted); margin-bottom:0.45rem; }
+.stat-val { font-family:'Syne',sans-serif; font-weight:800; font-size:1.6rem; color:var(--charcoal); line-height:1; letter-spacing:-1px; }
+.stat-sub { font-size:0.62rem; color:var(--muted); margin-top:0.3rem; font-family:'DM Mono',monospace; }
+.stat-badge { display:inline-flex; align-items:center; gap:3px; font-size:0.6rem; font-weight:600; padding:2px 7px; border-radius:8px; margin-top:0.35rem; font-family:'DM Mono',monospace; }
+.badge-up   { background:var(--green-pale); color:var(--green); }
+.badge-flat { background:var(--cream-2); color:var(--muted); }
+
+/* CARD */
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+.card-head { padding:0.8rem 1rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.72rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--charcoal); }
+.card-sub { font-family:'DM Mono',monospace; font-size:0.58rem; color:var(--muted); margin-top:2px; }
+.card-body { padding:0.9rem; }
+
+
+
+/* CHARTS */
+.chart-row { display:grid; grid-template-columns:1.8fr 1fr; gap:1.25rem; }
+.chart-wrap { height:240px; position:relative; }
+
+/* TABLE */
+table { width:100%; border-collapse:collapse; font-size:0.72rem; }
+thead th { font-family:'DM Mono',monospace; font-size:0.58rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); padding:0.5rem 0.9rem; border-bottom:1px solid var(--border); background:var(--cream); text-align:left; font-weight:500; }
+tbody td { padding:0.65rem 0.9rem; border-bottom:1px solid var(--border); }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:var(--cream); }
+.td-mandi { font-weight:600; font-size:0.75rem; }
+.td-state { color:var(--muted); font-family:'DM Mono',monospace; font-size:0.62rem; }
+.td-modal { font-family:'Syne',sans-serif; font-weight:700; font-size:0.8rem; }
+.td-minmax { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); }
+.trend-tag { display:inline-flex; align-items:center; gap:3px; font-size:0.62rem; font-weight:600; padding:2px 8px; border-radius:6px; font-family:'DM Mono',monospace; }
+.tt-up   { background:var(--green-pale); color:var(--green); }
+.tt-dn   { background:#FDECEA; color:var(--red); }
+.tt-flat { background:var(--cream-2); color:var(--muted); }
+
+/* MISC */
+.source-note { font-family:'DM Mono',monospace; font-size:0.58rem; color:var(--muted); padding:0.5rem 0.9rem; text-align:right; border-top:1px solid var(--border); }
+.loading-row { display:flex; align-items:center; gap:10px; padding:2rem; color:var(--muted); font-family:'DM Mono',monospace; font-size:0.72rem; }
+.spinner { width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--saffron); border-radius:50%; animation:spin 0.8s linear infinite; flex-shrink:0; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.error-msg { background:#FFF0EF; border:1px solid #F5C6C3; border-radius:8px; padding:0.75rem 1rem; font-size:0.72rem; color:var(--red); font-family:'DM Mono',monospace; margin:0.75rem; }
+.refresh-btn { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--muted); background:transparent; border:1px solid var(--border); border-radius:6px; padding:3px 9px; cursor:pointer; transition:all 0.15s; }
+.refresh-btn:hover { border-color:var(--saffron); color:var(--saffron); }
+.dist-legend { font-size:0.65rem; line-height:1.8; padding-top:0.5rem; }
+.dl-row { display:flex; align-items:center; gap:7px; }
+.dl-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+.dl-name { flex:1; color:var(--muted); }
+.dl-price { font-weight:600; color:var(--charcoal); font-family:'DM Mono',monospace; }
+
+@media (max-width:900px) {
+  .filter-bar { grid-template-columns:1fr; }
+  .stat-row { grid-template-columns:repeat(2,1fr); }
+  .chart-row { grid-template-columns:1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="logo-icon">🌾</div>
@@ -562,610 +168,373 @@ tbody tr:hover td { background: var(--cream); }
   </div>
 </header>
 
-<!-- DATA STATUS -->
-<div class="data-status">
-  <div class="ds-item"><div class="ds-dot ds-green"></div>AGMARKNET API Connected</div>
-  <div class="ds-item"><div class="ds-dot ds-green"></div>data.gov.in</div>
-  <div class="ds-item" id="recordsStatus"><div class="ds-dot ds-orange"></div>Fetching records...</div>
+<div class="status-bar">
+  <span><span class="sb-dot" id="apiDot"></span>AGMARKNET · data.gov.in</span>
+  <span id="recordsStatus">Fetching records...</span>
 </div>
 
-<!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track" id="tickerTrack">
     <div class="ticker-item">⏳ Loading live prices...</div>
   </div>
 </div>
 
-<!-- LAYOUT -->
-<div class="layout">
+<!-- FILTER BAR -->
+<div class="filter-bar">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="card">
-      <div class="section-label">🍎 Fruits</div>
-      <div class="comm-grid">
-        <button class="comm-btn active" data-c="Grapes" onclick="selectComm(this)">
-          <span class="comm-emoji">🍇</span><span class="comm-name">Grapes</span>
-        </button>
-        <button class="comm-btn" data-c="Apple" onclick="selectComm(this)">
-          <span class="comm-emoji">🍎</span><span class="comm-name">Apple</span>
-        </button>
-        <button class="comm-btn" data-c="Mango" onclick="selectComm(this)">
-          <span class="comm-emoji">🥭</span><span class="comm-name">Mango</span>
-        </button>
-        <button class="comm-btn" data-c="Pomegranate" onclick="selectComm(this)">
-          <span class="comm-emoji">🫐</span><span class="comm-name">Pomegr.</span>
-        </button>
-        <button class="comm-btn" data-c="Orange" onclick="selectComm(this)">
-          <span class="comm-emoji">🍊</span><span class="comm-name">Orange</span>
-        </button>
-      </div>
-
-      <div class="section-label">🥦 Vegetables</div>
-      <div class="comm-grid">
-        <button class="comm-btn" data-c="Coconut" onclick="selectComm(this)">
-          <span class="comm-emoji">🥥</span><span class="comm-name">Coconut</span>
-        </button>
-        <button class="comm-btn" data-c="Garlic" onclick="selectComm(this)">
-          <span class="comm-emoji">🧄</span><span class="comm-name">Garlic</span>
-        </button>
-        <button class="comm-btn" data-c="Ginger" onclick="selectComm(this)">
-          <span class="comm-emoji">🫚</span><span class="comm-name">Ginger</span>
-        </button>
-        <button class="comm-btn" data-c="Onion" onclick="selectComm(this)">
-          <span class="comm-emoji">🧅</span><span class="comm-name">Onion</span>
-        </button>
-        <button class="comm-btn" data-c="Potato" onclick="selectComm(this)">
-          <span class="comm-emoji">🥔</span><span class="comm-name">Potato</span>
-        </button>
-      </div>
-      <div style="padding:0 0.75rem 0.75rem;">
-        <button class="refresh-btn" style="width:100%;padding:6px;" onclick="fetchAll()">↻ Refresh All Data</button>
-      </div>
-    </div>
-
-    <!-- STATE FILTER -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title">Filter by State</div>
-        <button class="refresh-btn" onclick="clearState()">All</button>
-      </div>
-      <div class="card-body" style="padding:0.4rem 0.75rem 0.75rem;">
-        <select id="stateSelect" onchange="onStateChange()"
-          style="width:100%;padding:0.55rem 0.7rem;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:0.7rem;background:var(--cream);color:var(--charcoal);cursor:pointer;outline:none;">
-          <option value="">All India</option>
-        </select>
-        <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:0.5rem;" id="stateCount">Select a state to filter mandis</div>
-      </div>
-    </div>
-
-    <!-- SUMMARY CARD -->
-    <div class="card">
-      <div class="card-head"><div class="card-title">Market Summary</div></div>
-      <div class="card-body" id="summaryBody">
-        <div class="loading-row"><div class="spinner"></div>Loading...</div>
-      </div>
+  <!-- LEFT: Category -->
+  <div class="filter-group">
+    <div class="filter-label">Category</div>
+    <div class="cat-pills">
+      <button class="cat-pill active" data-cat="Fruits" onclick="selectCategory(this)">🍎 Fruits</button>
+      <button class="cat-pill" data-cat="Vegetables" onclick="selectCategory(this)">🥦 Vegetables</button>
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="main">
+  <!-- CENTRE: Commodity -->
+  <div class="filter-group">
+    <div class="filter-label">Commodity</div>
+    <div class="sku-pills" id="skuPills"></div>
+  </div>
 
-    <!-- STATS -->
-    <div class="stat-row">
-      <div class="stat-card sc-orange">
-        <div class="stat-label">Modal Price</div>
-        <div class="stat-val" id="sModal">—</div>
-        <div class="stat-sub">₹ per quintal · avg</div>
-        <div class="stat-badge badge-flat" id="sTrend">—</div>
-      </div>
-      <div class="stat-card sc-green">
-        <div class="stat-label">Mandis Reporting</div>
-        <div class="stat-val" id="sCount">—</div>
-        <div class="stat-sub" id="sCountSub">across India · today</div>
-      </div>
-      <div class="stat-card sc-gold">
-        <div class="stat-label">Highest Price</div>
-        <div class="stat-val" id="sMax">—</div>
-        <div class="stat-sub" id="sMaxMandi">—</div>
-      </div>
-      <div class="stat-card sc-red">
-        <div class="stat-label">Lowest Price</div>
-        <div class="stat-val" id="sMin">—</div>
-        <div class="stat-sub" id="sMinMandi">—</div>
-      </div>
+  <!-- RIGHT: State -->
+  <div class="filter-group">
+    <div class="filter-label">State</div>
+    <select class="state-select" id="stateSelect" onchange="onStateChange()">
+      <option value="">All India</option>
+    </select>
+  </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- STAT CARDS -->
+  <div class="stat-row">
+    <div class="stat-card sc-orange">
+      <div class="stat-label">Modal Price</div>
+      <div class="stat-val" id="sModal">—</div>
+      <div class="stat-sub">₹ per quintal · avg</div>
+      <div class="stat-badge badge-flat" id="sTrend">—</div>
     </div>
-
-    <!-- CHARTS -->
-    <div class="chart-row">
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <div class="card-title" id="chartTitle">— Price Distribution</div>
-            <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;">Modal price across mandis · ₹/quintal</div>
-          </div>
-          <button class="refresh-btn" onclick="renderCharts()">↻</button>
-        </div>
-        <div class="card-body">
-          <div class="chart-wrap"><canvas id="barChart"></canvas></div>
-        </div>
-        <div class="source-note">Source: AGMARKNET · data.gov.in · Updated daily</div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><div class="card-title">By State</div></div>
-        <div class="card-body">
-          <div class="chart-wrap" style="height:180px;"><canvas id="donutChart"></canvas></div>
-          <div class="dist-legend" id="distLegend"></div>
-        </div>
-      </div>
+    <div class="stat-card sc-green">
+      <div class="stat-label">Mandis Reporting</div>
+      <div class="stat-val" id="sCount">—</div>
+      <div class="stat-sub" id="sCountSub">across India</div>
+      <div class="stat-sub" id="sLastDate" style="margin-top:2px;font-size:0.58rem;">—</div>
     </div>
+    <div class="stat-card sc-gold">
+      <div class="stat-label">Highest Price</div>
+      <div class="stat-val" id="sMax">—</div>
+      <div class="stat-sub" id="sMaxMandi">—</div>
+    </div>
+    <div class="stat-card sc-red">
+      <div class="stat-label">Lowest Price</div>
+      <div class="stat-val" id="sMin">—</div>
+      <div class="stat-sub" id="sMinMandi">—</div>
+    </div>
+  </div>
 
-    <!-- FORECAST — above table -->
+  <!-- CHARTS -->
+  <div class="chart-row">
     <div class="card">
       <div class="card-head">
         <div>
-          <div class="card-title" id="fcTitle">Price Outlook — Next 4 Weeks</div>
-          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;">Indicative forecast · based on seasonal patterns</div>
+          <div class="card-title" id="chartTitle">Price Across Mandis</div>
+          <div class="card-sub">Modal price · ₹/quintal · top mandis</div>
         </div>
+        <button class="refresh-btn" onclick="renderCharts()">↻</button>
       </div>
       <div class="card-body">
-        <div class="forecast-grid" id="fcGrid">
-          <div class="fc-card" style="opacity:0.4">—</div>
-          <div class="fc-card" style="opacity:0.4">—</div>
-          <div class="fc-card" style="opacity:0.4">—</div>
-          <div class="fc-card" style="opacity:0.4">—</div>
-        </div>
+        <div class="chart-wrap"><canvas id="barChart"></canvas></div>
       </div>
+      <div class="source-note">Source: AGMARKNET · data.gov.in · Updated daily</div>
     </div>
-
-    <!-- MANDI TABLE — below forecast -->
     <div class="card">
-      <div class="card-head">
-        <div>
-          <div class="card-title" id="tableTitle">Mandi Prices</div>
-          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);margin-top:2px;" id="tableSub">Min · Modal · Max · ₹/quintal</div>
-        </div>
-      </div>
-      <div id="tableWrap">
-        <div class="loading-row"><div class="spinner"></div>Fetching live mandi data from AGMARKNET...</div>
+      <div class="card-head"><div class="card-title">Price by State</div></div>
+      <div class="card-body">
+        <div class="chart-wrap" style="height:180px;"><canvas id="donutChart"></canvas></div>
+        <div class="dist-legend" id="distLegend"></div>
       </div>
     </div>
-
   </div>
+
+  <!-- MANDI TABLE -->
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <div class="card-title" id="tableTitle">All Mandis</div>
+        <div class="card-sub" id="tableSub">Min · Modal · Max · ₹/quintal</div>
+      </div>
+      <button class="refresh-btn" onclick="fetchAll()">↻ Refresh</button>
+    </div>
+    <div id="tableWrap">
+      <div class="loading-row"><div class="spinner"></div>Fetching live mandi data from AGMARKNET...</div>
+    </div>
+  </div>
+
 </div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────
-// Now calling our own Vercel API (no CORS issues, key stays safe)
 const API_BASE = '/api/mandi';
 
-// Commodity name mappings (AGMARKNET uses specific names)
-// Each array = all variant names for that commodity in AGMARKNET
+const CATEGORIES = {
+  Fruits:     ['Grapes','Apple','Mango','Pomegranate','Orange'],
+  Vegetables: ['Coconut','Garlic','Ginger','Onion','Potato'],
+};
+
 const COMM_MAP = {
-  Grapes:      ['Grapes', 'Grapes(Black)', 'Grapes(Green)', 'Grapes(White)'],
+  Grapes:      ['Grapes','Grapes(Black)','Grapes(Green)','Grapes(White)'],
   Apple:       ['Apple'],
-  Mango:       ['Mango', 'Mango (Totapuri)', 'Mango(Alphonso)', 'Mango(Banginapalli)', 'Mango(Dasheri)', 'Mango(Kesar)', 'Mango(Langra)'],
+  Mango:       ['Mango','Mango (Totapuri)','Mango(Alphonso)','Mango(Banginapalli)','Mango(Dasheri)','Mango(Kesar)','Mango(Langra)'],
   Pomegranate: ['Pomegranate'],
-  Orange:      ['Orange', 'Mosambi(Sweet Lime)'],
-  Coconut:     ['Coconut', 'Coconut(Dried)', 'Tender Coconut'],
+  Orange:      ['Orange','Mosambi(Sweet Lime)'],
+  Coconut:     ['Coconut','Coconut(Dried)','Tender Coconut'],
   Garlic:      ['Garlic'],
-  Ginger:      ['Ginger(Dry)', 'Ginger(Green)', 'Ginger'],
-  Onion:       ['Onion', 'Onion(Brown)', 'Onion Large', 'Onion Small'],
-  Potato:      ['Potato', 'Potato(Kufri Jyoti)', 'Potato(Desi)'],
+  Ginger:      ['Ginger(Dry)','Ginger(Green)','Ginger'],
+  Onion:       ['Onion','Onion(Brown)','Onion Large','Onion Small'],
+  Potato:      ['Potato','Potato(Kufri Jyoti)','Potato(Desi)'],
 };
 
 const COMM_EMOJI = {
-  Grapes:'🍇', Apple:'🍎', Mango:'🥭', Pomegranate:'🫐', Orange:'🍊',
-  Coconut:'🥥', Garlic:'🧄', Ginger:'🫚', Onion:'🧅', Potato:'🥔'
+  Grapes:'🍇',Apple:'🍎',Mango:'🥭',Pomegranate:'🫐',Orange:'🍊',
+  Coconut:'🥥',Garlic:'🧄',Ginger:'🫚',Onion:'🧅',Potato:'🥔',
 };
 
 const CHART_COLORS = ['#E8621A','#1B6B3A','#B8860B','#C8372D','#2563EB','#7C3AED','#0891B2','#059669','#D97706','#9333EA'];
 
-// Seasonal forecast multipliers per commodity
-const FORECASTS = {
-  Grapes:      [0.97, 0.93, 0.88, 0.82],
-  Apple:       [1.02, 1.04, 1.06, 1.08],
-  Mango:       [1.05, 1.10, 1.08, 0.95],
-  Pomegranate: [1.02, 1.04, 1.06, 1.07],
-  Orange:      [0.98, 0.97, 1.01, 1.04],
-  Coconut:     [1.01, 1.02, 1.01, 1.03],
-  Garlic:      [1.03, 1.05, 1.07, 1.04],
-  Ginger:      [0.98, 1.02, 1.05, 1.08],
-  Onion:       [1.04, 1.08, 1.13, 1.18],
-  Potato:      [1.01, 1.02, 1.03, 1.05],
-};
 
-// ── STATE ──────────────────────────────────────────────────────
-let currentComm = 'Grapes';
-let allData = {};       // { commodity: [records] }
-let barChart = null;
-let donutChart = null;
+let currentCategory = 'Fruits';
+let currentComm     = 'Grapes';
+let currentState    = '';
+let allData         = {};
+let barChart        = null;
+let donutChart      = null;
 
-// ── INIT ───────────────────────────────────────────────────────
 async function init() {
-  // Set date
-  const now = new Date();
   document.getElementById('headerDate').textContent =
-    now.toLocaleDateString('en-IN', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
-
+    new Date().toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+  renderSkuPills('Fruits');
   await fetchAll();
 }
 
-// ── FETCH ALL COMMODITIES ──────────────────────────────────────
 async function fetchAll() {
-  document.getElementById('recordsStatus').innerHTML =
-    '<div class="ds-dot ds-orange" style="width:5px;height:5px;border-radius:50%;background:var(--saffron);"></div>Fetching records...';
-
-  // Fetch all 10 commodities in parallel
-  const promises = Object.keys(COMM_MAP).map(c => fetchCommodity(c));
-  await Promise.all(promises);
-
-  const total = Object.values(allData).reduce((s, r) => s + r.length, 0);
-  document.getElementById('recordsStatus').innerHTML =
-    `<div class="ds-dot ds-green" style="width:5px;height:5px;border-radius:50%;background:#5DD68A;"></div>${total.toLocaleString('en-IN')} records loaded`;
-
+  document.getElementById('apiDot').className = 'sb-dot loading';
+  document.getElementById('recordsStatus').textContent = 'Fetching records...';
+  await Promise.all(Object.keys(COMM_MAP).map(c => fetchCommodity(c)));
+  const total = Object.values(allData).reduce((s,r) => s+r.length, 0);
+  document.getElementById('apiDot').className = 'sb-dot';
+  document.getElementById('recordsStatus').textContent = `${total.toLocaleString('en-IN')} records loaded`;
   updateTicker();
   renderView();
-  renderSummary();
 }
 
-// ── FETCH ONE COMMODITY ────────────────────────────────────────
 async function fetchCommodity(comm) {
-  const names = COMM_MAP[comm];
   let allRecords = [];
-
-  for (const name of names) {
+  for (const name of COMM_MAP[comm]) {
     try {
-      const url = `${API_BASE}?commodity=${encodeURIComponent(name)}`;
-      const res = await fetch(url);
+      const res = await fetch(`${API_BASE}?commodity=${encodeURIComponent(name)}`);
       if (!res.ok) continue;
       const json = await res.json();
-      if (json.records && json.records.length > 0) {
-        allRecords = allRecords.concat(json.records);
-      }
-    } catch(e) {
-      console.warn('Fetch error for', name, e);
-    }
+      if (json.records?.length > 0) allRecords = allRecords.concat(json.records);
+    } catch(e) { console.warn('Error fetching', name, e); }
   }
-
-  // Deduplicate by market name, keep highest modal
   const seen = {};
   for (const r of allRecords) {
-    const key = r.market || r.Market;
+    const key   = (r.market || r.Market || '').trim();
     const modal = parseInt(r.modal_price || r.Modal_Price || 0);
     if (!seen[key] || modal > seen[key].modal) {
       seen[key] = {
-        market: r.market || r.Market || '—',
-        state: r.state || r.State || '—',
-        district: r.district || r.District || '—',
-        commodity: r.commodity || r.Commodity || comm,
-        min: parseInt(r.min_price || r.Min_Price || 0),
-        modal: modal,
-        max: parseInt(r.max_price || r.Max_Price || 0),
-        date: r.arrival_date || r.Arrival_Date || '—',
+        market:   key || '—',
+        state:    (r.state    || r.State    || '—').trim(),
+        district: (r.district || r.District || '—').trim(),
+        commodity:(r.commodity|| r.Commodity|| comm).trim(),
+        min:      parseInt(r.min_price || r.Min_Price || 0),
+        modal,
+        max:      parseInt(r.max_price || r.Max_Price || 0),
+        date:     r.arrival_date || r.Arrival_Date || '—',
       };
     }
   }
-
   allData[comm] = Object.values(seen).filter(r => r.modal > 0).sort((a,b) => b.modal - a.modal);
 }
 
-// ── SELECT COMMODITY ───────────────────────────────────────────
-let currentState = '';
+function selectCategory(btn) {
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCategory = btn.dataset.cat;
+  currentComm     = CATEGORIES[currentCategory][0];
+  currentState    = '';
+  document.getElementById('stateSelect').value = '';
+  renderSkuPills(currentCategory);
+  renderView();
+}
+
+function renderSkuPills(cat) {
+  document.getElementById('skuPills').innerHTML = CATEGORIES[cat].map(c => `
+    <button class="sku-pill ${c === currentComm ? 'active' : ''}" data-c="${c}" onclick="selectComm(this)">
+      ${COMM_EMOJI[c]} ${c}
+    </button>`).join('');
+}
 
 function selectComm(btn) {
-  document.querySelectorAll('.comm-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sku-pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  currentComm = btn.dataset.c;
+  currentComm  = btn.dataset.c;
   currentState = '';
   document.getElementById('stateSelect').value = '';
   renderView();
 }
 
-// ── STATE FILTER ────────────────────────────────────────────────
 function onStateChange() {
   currentState = document.getElementById('stateSelect').value;
   renderView();
 }
 
-function clearState() {
-  currentState = '';
-  document.getElementById('stateSelect').value = '';
-  renderView();
+function populateStates(records) {
+  const states = [...new Set(records.map(r => r.state))].filter(s => s && s !== '—').sort();
+  document.getElementById('stateSelect').innerHTML =
+    '<option value="">All India</option>' +
+    states.map(s => `<option value="${s}" ${s === currentState ? 'selected' : ''}>${s}</option>`).join('');
 }
 
-function populateStateDropdown(records) {
-  const states = [...new Set(records.map(r => r.state))].filter(Boolean).sort();
-  const sel = document.getElementById('stateSelect');
-  // Keep "All India" option, rebuild the rest
-  sel.innerHTML = '<option value="">All India</option>' +
-    states.map(s => `<option value="${s}"${s === currentState ? ' selected' : ''}>${s}</option>`).join('');
-}
-
-// ── RENDER VIEW ────────────────────────────────────────────────
 function renderView() {
   const allRecords = allData[currentComm] || [];
-  const emoji = COMM_EMOJI[currentComm];
+  const emoji      = COMM_EMOJI[currentComm];
+  populateStates(allRecords);
 
-  // Populate state dropdown from full dataset
-  populateStateDropdown(allRecords);
+  const records = currentState ? allRecords.filter(r => r.state === currentState) : allRecords;
+  const stateLabel = currentState ? ` · ${currentState}` : ' · All India';
 
-  // Apply state filter
-  const records = currentState
-    ? allRecords.filter(r => r.state === currentState)
-    : allRecords;
+  document.getElementById('chartTitle').textContent = `${emoji} ${currentComm} — Price Across Mandis`;
+  document.getElementById('tableTitle').textContent = `${emoji} ${currentComm} — All Mandis${stateLabel}`;
+  document.getElementById('tableSub').textContent   = `${records.length} mandis reporting · Min · Modal · Max · ₹/quintal`;
 
-  // Update state count label
-  const stateCountEl = document.getElementById('stateCount');
-  if (currentState) {
-    stateCountEl.textContent = `${records.length} mandis in ${currentState}`;
-  } else {
-    stateCountEl.textContent = `${allRecords.length} mandis across India`;
-  }
-
-  // Stats
   if (records.length === 0) {
-    document.getElementById('sModal').textContent = '—';
-    document.getElementById('sCount').textContent = '0';
-    document.getElementById('sMax').textContent = '—';
-    document.getElementById('sMin').textContent = '—';
-    document.getElementById('sMaxMandi').textContent = 'No data';
-    document.getElementById('sMinMandi').textContent = 'No data';
-    document.getElementById('sTrend').textContent = 'No data';
-    document.getElementById('tableWrap').innerHTML =
-      `<div class="error-msg">No live data found for ${currentComm}. AGMARKNET may not have today's records yet — try refreshing later.</div>`;
+    ['sModal','sMax','sMin'].forEach(id => document.getElementById(id).textContent = '—');
+    document.getElementById('sCount').textContent    = '0';
+    document.getElementById('sCountSub').textContent = currentState ? `No mandis in ${currentState}` : 'No data today';
+    document.getElementById('sMaxMandi').textContent = '—';
+    document.getElementById('sMinMandi').textContent = '—';
+    document.getElementById('sTrend').textContent    = 'No data';
+    document.getElementById('sLastDate').textContent = '—';
+    document.getElementById('tableWrap').innerHTML   =
+      `<div class="error-msg">No data for ${currentComm}${currentState ? ' in '+currentState : ''}. Try a different filter or refresh.</div>`;
     return;
   }
 
-  const modals = records.map(r => r.modal);
-  const avgModal = Math.round(modals.reduce((a,b) => a+b, 0) / modals.length);
+  const avgModal = Math.round(records.reduce((s,r) => s+r.modal,0) / records.length);
   const maxR = records[0];
-  const minR = records[records.length - 1];
+  const minR = records[records.length-1];
+  const spread = ((maxR.modal - minR.modal) / avgModal * 100).toFixed(0);
 
-  document.getElementById('sModal').textContent = '₹' + avgModal.toLocaleString('en-IN');
-  document.getElementById('sCount').textContent = records.length;
-  document.getElementById('sCountSub').textContent = `mandis · ${records[0]?.date || 'today'}`;
-  document.getElementById('sMax').textContent = '₹' + maxR.max.toLocaleString('en-IN');
+  document.getElementById('sModal').textContent    = '₹' + avgModal.toLocaleString('en-IN');
+  document.getElementById('sCount').textContent    = records.length;
+  document.getElementById('sCountSub').textContent = currentState ? `mandis in ${currentState}` : 'mandis across India';
+  // Last reported date from data
+  const dates = records.map(r => r.date).filter(d => d && d !== '—');
+  const lastDate = dates.length > 0 ? dates[0] : '—';
+  document.getElementById('sLastDate').textContent = `Last reported: ${lastDate}`;
+  document.getElementById('sMax').textContent      = '₹' + maxR.max.toLocaleString('en-IN');
   document.getElementById('sMaxMandi').textContent = maxR.market + ' · ' + maxR.state;
-  document.getElementById('sMin').textContent = '₹' + minR.min.toLocaleString('en-IN');
+  document.getElementById('sMin').textContent      = '₹' + minR.min.toLocaleString('en-IN');
   document.getElementById('sMinMandi').textContent = minR.market + ' · ' + minR.state;
 
-  // Trend badge (compare min vs modal spread as proxy)
-  const spread = ((maxR.modal - minR.modal) / avgModal * 100).toFixed(1);
   const tb = document.getElementById('sTrend');
-  if (spread > 30) {
-    tb.className = 'stat-badge badge-up'; tb.textContent = '↑ High variance';
-  } else if (spread < 10) {
-    tb.className = 'stat-badge badge-flat'; tb.textContent = '→ Stable market';
-  } else {
-    tb.className = 'stat-badge badge-up'; tb.textContent = '↑ Active market';
-  }
+  if (spread > 30)       { tb.className='stat-badge badge-up';   tb.textContent='↑ Wide spread'; }
+  else if (spread < 10)  { tb.className='stat-badge badge-flat'; tb.textContent='→ Stable'; }
+  else                   { tb.className='stat-badge badge-up';   tb.textContent='↑ Active'; }
 
-  // Titles
-  document.getElementById('chartTitle').textContent = `${emoji} ${currentComm} — Top Mandis`;
-  document.getElementById('tableTitle').textContent = `${emoji} ${currentComm} — All Mandis`;
-  document.getElementById('tableSub').textContent =
-    `${records.length} mandis reporting · Min · Modal · Max · ₹/quintal`;
-  document.getElementById('fcTitle').textContent =
-    `${emoji} ${currentComm} — Price Outlook`;
-
-  renderCharts();
+  renderCharts(records);
   renderTable(records);
-  renderForecast(avgModal);
 }
 
-// ── CHARTS ─────────────────────────────────────────────────────
-function renderCharts() {
-  const records = allData[currentComm] || [];
+
+function renderCharts(records) {
+  if (!records) records = allData[currentComm] || [];
   if (!records.length) return;
+  const top12 = records.slice(0,12);
 
-  const top12 = records.slice(0, 12);
-
-  // Bar chart
   const bCtx = document.getElementById('barChart').getContext('2d');
   if (barChart) barChart.destroy();
   barChart = new Chart(bCtx, {
-    type: 'bar',
-    data: {
-      labels: top12.map(r => r.market.length > 14 ? r.market.slice(0,13)+'…' : r.market),
-      datasets: [{
-        label: 'Modal ₹/q',
-        data: top12.map(r => r.modal),
-        backgroundColor: top12.map((_,i) => i === 0 ? 'rgba(232,98,26,0.85)' : 'rgba(232,98,26,0.35)'),
-        borderColor: 'rgba(232,98,26,0.9)',
-        borderWidth: 1,
-        borderRadius: 4,
-      }, {
-        label: 'Max ₹/q',
-        data: top12.map(r => r.max),
-        backgroundColor: 'rgba(184,134,11,0.15)',
-        borderColor: 'rgba(184,134,11,0.5)',
-        borderWidth: 1,
-        borderRadius: 4,
-        type: 'bar',
-      }]
+    type:'bar',
+    data:{
+      labels: top12.map(r => r.market.length>14 ? r.market.slice(0,13)+'…' : r.market),
+      datasets:[
+        { label:'Modal ₹/q', data:top12.map(r=>r.modal), backgroundColor:top12.map((_,i)=>i===0?'rgba(232,98,26,0.85)':'rgba(232,98,26,0.4)'), borderRadius:4 },
+        { label:'Max ₹/q',   data:top12.map(r=>r.max),   backgroundColor:'rgba(184,134,11,0.2)', borderColor:'rgba(184,134,11,0.5)', borderWidth:1, borderRadius:4 }
+      ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.dataset.label + ': ₹' + ctx.parsed.y.toLocaleString('en-IN')
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { font: { family: 'DM Mono', size: 9 }, color: '#7A6F65', maxRotation: 35 }
-        },
-        y: {
-          grid: { color: '#E5DDD3' },
-          ticks: {
-            font: { family: 'DM Mono', size: 9 },
-            color: '#7A6F65',
-            callback: v => '₹' + v.toLocaleString('en-IN')
-          }
-        }
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:ctx=>ctx.dataset.label+': ₹'+ctx.parsed.y.toLocaleString('en-IN') } } },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{family:'DM Mono',size:9},color:'#7A6F65',maxRotation:35} },
+        y:{ grid:{color:'#E5DDD3'}, ticks:{font:{family:'DM Mono',size:9},color:'#7A6F65',callback:v=>'₹'+v.toLocaleString('en-IN')} }
       }
     }
   });
 
-  // Donut — by state
   const stateMap = {};
-  for (const r of records) {
-    if (!stateMap[r.state]) stateMap[r.state] = [];
-    stateMap[r.state].push(r.modal);
-  }
-  const stateLabels = Object.keys(stateMap).sort((a,b) =>
-    (stateMap[b].reduce((x,y)=>x+y,0)/stateMap[b].length) -
-    (stateMap[a].reduce((x,y)=>x+y,0)/stateMap[a].length)
-  ).slice(0, 8);
-  const stateAvgs = stateLabels.map(s =>
-    Math.round(stateMap[s].reduce((a,b) => a+b, 0) / stateMap[s].length)
-  );
+  records.forEach(r => { if (!stateMap[r.state]) stateMap[r.state]=[]; stateMap[r.state].push(r.modal); });
+  const stateLabels = Object.keys(stateMap).sort((a,b)=>(stateMap[b].reduce((x,y)=>x+y,0)/stateMap[b].length)-(stateMap[a].reduce((x,y)=>x+y,0)/stateMap[a].length)).slice(0,8);
+  const stateAvgs   = stateLabels.map(s=>Math.round(stateMap[s].reduce((a,b)=>a+b,0)/stateMap[s].length));
 
   const dCtx = document.getElementById('donutChart').getContext('2d');
   if (donutChart) donutChart.destroy();
   donutChart = new Chart(dCtx, {
-    type: 'doughnut',
-    data: {
-      labels: stateLabels,
-      datasets: [{
-        data: stateAvgs,
-        backgroundColor: CHART_COLORS.slice(0, stateLabels.length),
-        borderWidth: 2,
-        borderColor: '#FFFCF8'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      cutout: '62%',
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.label + ': ₹' + ctx.parsed.toLocaleString('en-IN') + '/q'
-          }
-        }
-      }
+    type:'doughnut',
+    data:{ labels:stateLabels, datasets:[{ data:stateAvgs, backgroundColor:CHART_COLORS.slice(0,stateLabels.length), borderWidth:2, borderColor:'#FFFCF8' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.label+': ₹'+ctx.parsed.toLocaleString('en-IN')+'/q'}} }
     }
   });
 
-  // Legend
-  document.getElementById('distLegend').innerHTML = stateLabels.map((s, i) => `
+  document.getElementById('distLegend').innerHTML = stateLabels.map((s,i)=>`
     <div class="dl-row">
       <div class="dl-dot" style="background:${CHART_COLORS[i]}"></div>
       <span class="dl-name">${s}</span>
       <span class="dl-price">₹${stateAvgs[i].toLocaleString('en-IN')}</span>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ── TABLE ──────────────────────────────────────────────────────
 function renderTable(records) {
+  if (!records.length) { document.getElementById('tableWrap').innerHTML='<div class="error-msg">No data.</div>'; return; }
   const rows = records.map(r => {
-    const spread = r.max - r.min;
-    const pct = r.modal > 0 ? ((spread / r.modal) * 100).toFixed(0) : 0;
-    let tClass = 'tt-flat', tLabel = '→ Stable';
-    if (pct > 30) { tClass = 'tt-up'; tLabel = '↑ Wide range'; }
-    else if (r.modal > r.min * 1.1) { tClass = 'tt-up'; tLabel = '↑ Active'; }
-
-    return `
-    <tr>
+    const pct = r.modal>0 ? ((r.max-r.min)/r.modal*100).toFixed(0) : 0;
+    let tClass='tt-flat', tLabel='→ Stable';
+    if (pct>30) { tClass='tt-up'; tLabel='↑ Wide range'; }
+    else if (r.modal > r.min*1.1) { tClass='tt-up'; tLabel='↑ Active'; }
+    return `<tr>
       <td><div class="td-mandi">${r.market}</div></td>
       <td><div class="td-state">${r.state}</div></td>
-      <td><span class="td-min">₹${r.min.toLocaleString('en-IN')}</span></td>
-      <td><span class="td-price td-modal">₹${r.modal.toLocaleString('en-IN')}</span></td>
-      <td><span class="td-max">₹${r.max.toLocaleString('en-IN')}</span></td>
+      <td><div class="td-state">${r.district}</div></td>
+      <td class="td-minmax">₹${r.min.toLocaleString('en-IN')}</td>
+      <td><span class="td-modal">₹${r.modal.toLocaleString('en-IN')}</span></td>
+      <td class="td-minmax">₹${r.max.toLocaleString('en-IN')}</td>
       <td><div class="td-state">${r.commodity}</div></td>
       <td><span class="trend-tag ${tClass}">${tLabel}</span></td>
     </tr>`;
   }).join('');
-
   document.getElementById('tableWrap').innerHTML = `
     <table>
-      <thead>
-        <tr>
-          <th>Mandi</th>
-          <th>State</th>
-          <th>Min</th>
-          <th>Modal</th>
-          <th>Max</th>
-          <th>Variety</th>
-          <th>Signal</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Mandi</th><th>State</th><th>District</th><th>Min</th><th>Modal</th><th>Max</th><th>Variety</th><th>Signal</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
-    <div class="source-note">AGMARKNET via data.gov.in · ${records[0]?.date || 'Today'} · Prices in ₹/quintal</div>
-  `;
+    <div class="source-note">AGMARKNET via data.gov.in · ${records[0]?.date||'Today'} · ₹/quintal</div>`;
 }
 
-// ── FORECAST ───────────────────────────────────────────────────
-function renderForecast(basePrice) {
-  const mults = FORECASTS[currentComm] || [1, 1, 1, 1];
-  const today = new Date();
-
-  const cards = mults.map((m, i) => {
-    const wDate = new Date(today);
-    wDate.setDate(wDate.getDate() + (i + 1) * 7);
-    const price = Math.round(basePrice * m);
-    const low = Math.round(price * 0.92);
-    const high = Math.round(price * 1.08);
-    const isUp = price >= basePrice;
-    const chg = (((price - basePrice) / basePrice) * 100).toFixed(1);
-    const color = isUp ? 'var(--green)' : 'var(--red)';
-    const bg = isUp ? 'rgba(27,107,58,0.04)' : 'rgba(200,55,45,0.04)';
-    const border = isUp ? 'rgba(27,107,58,0.2)' : 'rgba(200,55,45,0.2)';
-
-    return `
-    <div class="fc-card" style="background:${bg};border-color:${border}">
-      <div class="fc-week">Wk ${i+1} · ${wDate.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</div>
-      <div class="fc-price" style="color:${color}">₹${price.toLocaleString('en-IN')}</div>
-      <div class="fc-range">₹${low.toLocaleString('en-IN')} – ₹${high.toLocaleString('en-IN')}</div>
-      <div class="fc-dir" style="color:${color}">${isUp ? '↑' : '↓'} ${Math.abs(chg)}% vs now</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('fcGrid').innerHTML = cards;
-}
-
-// ── TICKER ─────────────────────────────────────────────────────
 function updateTicker() {
   const items = Object.keys(allData).map(c => {
     const recs = allData[c];
-    if (!recs || !recs.length) return null;
-    const avg = Math.round(recs.reduce((s, r) => s + r.modal, 0) / recs.length);
-    const topMandi = recs[0]?.market || '—';
-    const emoji = COMM_EMOJI[c];
-    return `<div class="ticker-item">${emoji} ${c} · ${topMandi} · <span class="t-up">₹${avg.toLocaleString('en-IN')}/q</span></div>`;
+    if (!recs?.length) return null;
+    const avg = Math.round(recs.reduce((s,r)=>s+r.modal,0)/recs.length);
+    return `<div class="ticker-item">${COMM_EMOJI[c]} ${c} · ₹${avg.toLocaleString('en-IN')}/q</div>`;
   }).filter(Boolean);
-
-  const doubled = [...items, ...items].join('');
-  document.getElementById('tickerTrack').innerHTML = doubled;
+  document.getElementById('tickerTrack').innerHTML = [...items,...items].join('');
 }
 
-// ── SUMMARY ────────────────────────────────────────────────────
-function renderSummary() {
-  const lines = Object.keys(allData).map(c => {
-    const recs = allData[c];
-    if (!recs || !recs.length) return `<div class="dl-row" style="margin-bottom:6px"><span style="font-size:1rem">${COMM_EMOJI[c]}</span><span class="dl-name" style="font-size:0.68rem;">${c}</span><span class="dl-price" style="font-size:0.65rem;color:var(--muted);">No data</span></div>`;
-    const avg = Math.round(recs.reduce((s,r) => s+r.modal, 0) / recs.length);
-    return `<div class="dl-row" style="margin-bottom:6px"><span style="font-size:1rem">${COMM_EMOJI[c]}</span><span class="dl-name" style="font-size:0.68rem;">${c}</span><span class="dl-price" style="font-size:0.68rem;">₹${avg.toLocaleString('en-IN')}</span></div>`;
-  }).join('');
-
-  document.getElementById('summaryBody').innerHTML = `
-    <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.6rem;">Avg Modal · ₹/quintal</div>
-    ${lines}
-  `;
-}
-
-// ── START ──────────────────────────────────────────────────────
 init();
 </script>
 </body>
