@@ -2,8 +2,8 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
-  const SUPABASE_URL  = process.env.SUPABASE_URL;
-  const SUPABASE_KEY  = process.env.SUPABASE_ANON_KEY;
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://neqmepestaetsooulxqz.supabase.co';
+  const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lcW1lcGVzdGFldHNvb3VseHF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NDM1OTUsImV4cCI6MjA5MzExOTU5NX0.KJcYjdQ_HjSVgbkRp4qZ_-LslHQ27755mRCP6Urrh2s';
 
   const { commodity, state } = req.query;
 
@@ -12,13 +12,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Build Supabase query URL
     let url = `${SUPABASE_URL}/rest/v1/mandi_prices`
             + `?commodity=eq.${encodeURIComponent(commodity)}`
             + `&order=price_date.desc,modal_price.desc`
             + `&limit=200`;
 
-    // Optional state filter
     if (state) {
       url += `&state=eq.${encodeURIComponent(state)}`;
     }
@@ -33,7 +31,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Format to match existing structure MandiPulse expects
     const records = data.map(r => ({
       market:       r.market,
       state:        r.state,
